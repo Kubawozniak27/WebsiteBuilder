@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{34238308-591E-40BF-A878-B84850A781B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{7991ADC7-647C-48F7-9751-CE3DBBD03F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.BusinessLogic", "WebsiteBuilder.BusinessLogic\WebsiteBuilder.BusinessLogic.csproj", "{11B4553F-A011-46C9-9B2C-4206D6402C65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.Data", "WebsiteBuilder.Data\WebsiteBuilder.Data.csproj", "{B7C8236A-E929-43FD-961A-0E343B80A6AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.Public", "WebsiteBuilder.Public\WebsiteBuilder.Public.csproj", "{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "WebsiteBuilder.Database", "WebsiteBuilder.Database\WebsiteBuilder.Database.sqlproj", "{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.Web", "WebsiteBuilder.Web\WebsiteBuilder.Web.csproj", "{73ACC31E-5E21-4998-92FF-26D4E6D70762}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11B4553F-A011-46C9-9B2C-4206D6402C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B4553F-A011-46C9-9B2C-4206D6402C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B4553F-A011-46C9-9B2C-4206D6402C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B4553F-A011-46C9-9B2C-4206D6402C65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C8236A-E929-43FD-961A-0E343B80A6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C8236A-E929-43FD-961A-0E343B80A6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C8236A-E929-43FD-961A-0E343B80A6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C8236A-E929-43FD-961A-0E343B80A6AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11B4553F-A011-46C9-9B2C-4206D6402C65} = {34238308-591E-40BF-A878-B84850A781B7}
+		{B7C8236A-E929-43FD-961A-0E343B80A6AD} = {34238308-591E-40BF-A878-B84850A781B7}
+		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E} = {34238308-591E-40BF-A878-B84850A781B7}
+		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7} = {34238308-591E-40BF-A878-B84850A781B7}
+		{73ACC31E-5E21-4998-92FF-26D4E6D70762} = {7991ADC7-647C-48F7-9751-CE3DBBD03F65}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BD81CDD-BB81-4883-B0F7-9145E755462B}
+	EndGlobalSection
+EndGlobal
