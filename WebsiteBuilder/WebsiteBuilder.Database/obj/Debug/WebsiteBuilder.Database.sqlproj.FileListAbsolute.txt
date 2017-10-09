@@ -1,0 +1,9 @@
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\bin\Debug\WebsiteBuilder.Database.dacpac
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\bin\Debug\WebsiteBuilder.Database.dll
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\bin\Debug\WebsiteBuilder.Database.pdb
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\Model.xml
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\refactor.xml
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\postdeploy.sql
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\predeploy.sql
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\WebsiteBuilder.Database.dll
+C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Database\obj\Debug\WebsiteBuilder.Database.pdb

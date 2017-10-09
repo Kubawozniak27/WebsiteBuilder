@@ -17,6 +17,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "WebsiteBuilder.Database", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.Web", "WebsiteBuilder.Web\WebsiteBuilder.Web.csproj", "{73ACC31E-5E21-4998-92FF-26D4E6D70762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteBuilder.Core", "WebsiteBuilder.Core\WebsiteBuilder.Core.csproj", "{27922298-0A64-47CF-9A73-0DA544710260}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73ACC31E-5E21-4998-92FF-26D4E6D70762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27922298-0A64-47CF-9A73-0DA544710260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27922298-0A64-47CF-9A73-0DA544710260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27922298-0A64-47CF-9A73-0DA544710260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27922298-0A64-47CF-9A73-0DA544710260}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E} = {34238308-591E-40BF-A878-B84850A781B7}
 		{24BD0476-CE39-4984-B0A1-7AF7014DEBF7} = {34238308-591E-40BF-A878-B84850A781B7}
 		{73ACC31E-5E21-4998-92FF-26D4E6D70762} = {7991ADC7-647C-48F7-9751-CE3DBBD03F65}
+		{27922298-0A64-47CF-9A73-0DA544710260} = {34238308-591E-40BF-A878-B84850A781B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BD81CDD-BB81-4883-B0F7-9145E755462B}
