@@ -7,7 +7,7 @@ using WebsiteBuilder.BusinessLogic.Infrastructure;
 using WebsiteBuilder.Core.Service;
 using WebsiteBuilder.Public.Website;
 
-namespace WebsiteBuilder.BusinessLogic.Website
+namespace WebsiteBuilder.BusinessLogic.Website.Commands
 {
     public class AddWebsiteCommand : CommandBase, ICommand<OperationResult, WebsiteDto>
     {

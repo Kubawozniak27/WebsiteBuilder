@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebsiteBuilder.BusinessLogic.Website;
+using WebsiteBuilder.BusinessLogic.Website.Commands;
 using WebsiteBuilder.Public.Website;
 
 namespace WebsiteBuilder.Web.Controllers
@@ -13,7 +13,8 @@ namespace WebsiteBuilder.Web.Controllers
         // GET: Website
         public ActionResult Index()
         {
-            return View();
+            var websites = GetQuery<GetWebsitesQuery>().Execute();
+            return View(websites);
         }
 
         [HttpGet]
@@ -21,6 +22,7 @@ namespace WebsiteBuilder.Web.Controllers
         {
             return View();
         }
+
 
         [HttpPost]
         public ActionResult AddWebsite(WebsiteDto websiteDto)

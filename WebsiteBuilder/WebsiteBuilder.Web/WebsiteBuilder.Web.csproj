@@ -164,6 +164,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WebsiteController.cs" />
+    <Compile Include="Controllers\WebsiteEditorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -173,15 +174,30 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ColorPicker\bootstrap-colorpicker.css" />
+    <Content Include="Content\ColorPicker\bootstrap-colorpicker.min.css" />
+    <Content Include="Content\Images\alpha-horizontal.png" />
+    <Content Include="Content\Images\alpha.png" />
+    <Content Include="Content\Images\hue-horizontal.png" />
+    <Content Include="Content\Images\hue.png" />
+    <Content Include="Content\Images\saturation.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="ScriptsApp\Common\AjaxHelper.js" />
+    <Content Include="ScriptsApp\Common\FormHelper.js" />
+    <Content Include="ScriptsApp\Common\JqueryDataTableHelper.js" />
+    <Content Include="ScriptsApp\WebsiteEditor\Index.js" />
+    <Content Include="Scripts\bootstrap-colorpicker.js" />
+    <Content Include="Scripts\bootstrap-colorpicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\ColorPicker\bootstrap-colorpicker.css.map" />
+    <Content Include="Content\ColorPicker\bootstrap-colorpicker.min.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -208,6 +224,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Website\AddWebsite.cshtml" />
+    <Content Include="Views\Website\Index.cshtml" />
+    <Content Include="Views\WebsiteEditor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

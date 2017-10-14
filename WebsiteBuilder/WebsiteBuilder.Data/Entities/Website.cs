@@ -9,6 +9,6 @@ namespace WebsiteBuilder.Data.Entities
     public class Website : BaseEntity
     {
         public string Name { get; set; }
-        public DateTime? PublishDate { get; set; }
+        public DateTime PublishDate { get; set; }
     }
 }
