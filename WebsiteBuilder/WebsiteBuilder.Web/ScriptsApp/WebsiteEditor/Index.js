@@ -10,15 +10,23 @@ WebsiteEditor.Index = (function () {
         backgroundColorHidden: '#backgroundColorHidden'
     }
 
+    var partialViews = {
+        header: ""
+
+    };
 
 
     $(function () {      
         init();
+
     });
 
     function init() {
         initPanelClick();
         initColorPicker();
+        getBaseTemplates();
+        initSortable(".sortable-list");
+        initDraggable();
     }
 
     function initColorPicker() {
@@ -39,6 +47,45 @@ WebsiteEditor.Index = (function () {
             $(selectors.backgroundColorHidden).val(e.color.toString('hex'));
             $(selectors.websiteContainer).css("background-color", e.color.toString('hex'));
         });
+    }
+
+    function initSortable(sortableSelector) {
+        $(sortableSelector).sortable({
+            revert: true,
+            stop: function (event, ui) {
+                // Ensure that below behaviour is executed only on first drop
+                // (when question is dragged from dragable-list, not dragged from sortable itself).
+                if ($(ui.item).hasClass('already-dropped')) {
+                    return;
+                }
+
+                $(this).find(".empty-element").remove();
+
+
+
+                var templates = partialViews.header;
+                questionElement = $.parseHTML(templates);
+                ui.item.replaceWith(questionElement);
+                
+
+            }
+        });
+    }
+
+    function getBaseTemplates() {
+        AjaxHelper.get("/WebsiteEditor/GetBaseTemplates", null, function (response) {
+            partialViews.header = response.Header;
+        });
+    }
+
+    function initDraggable() {
+        $(".draggable").draggable({            
+            helper: "clone",
+            revert: "invalid",
+            connectToSortable: ".sortable-list"
+        });
+
+        $("ul, li").disableSelection();
     }
 
     function initPanelClick() {

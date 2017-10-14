@@ -1,17 +1,7 @@
 ﻿var FormHelper = (function () {
-    $.fn.datepicker.defaults.language = 'pl';
+   
 
-    $.notifyDefaults({
-        newest_on_top: true,
-        mouse_over: 'pause',
-        delay: 5000,
-        animate: {
-            enter: 'animated flipInY',
-            //exit: 'animated flipOutX'
-        },
-        type: 'success',
-        z_index: 99999
-    });
+   
 
     var handleOperationResult = function (result, div) {
         if (!result || !result.ErrorMessages)

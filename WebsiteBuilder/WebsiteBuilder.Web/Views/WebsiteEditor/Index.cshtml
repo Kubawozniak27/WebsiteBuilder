@@ -15,6 +15,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")   
     <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/ScriptsApp/Common/AjaxHelper.js"></script>
+    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
     <style>
         body {
             background-color: #333333;
@@ -26,7 +29,40 @@
         ul {
             list-style: none;
         }
+        .sortable-list, .draggable-list {
+            border: 2px solid #eee;
+            min-width: 100%;
+            min-height: 20px;
+            list-style-type: none;
+            margin: 0;
+            padding: 0 10px 0 0;
+            float: left;
+            margin-right: 10px;
+        }
 
+            .sortable-list li, .draggable-list li {
+                margin: 5px;
+                padding: 5px;
+                font-size: 1.2em;
+                width: 100%;
+            }
+
+        .draggable-content {
+            
+            cursor: move;
+        }
+
+        .sortable-list li i, .draggable-list li i {
+            margin: 0 0 0 0;
+        }
+
+        .sortable-list li label, .draggable-list li label {
+            font-size: 0.8em;
+        }
+
+        .ibox {
+            margin-bottom: 0;
+        }
         header {
             background-color: #132026;
             min-height: 50px;
@@ -93,6 +129,8 @@
             a.clickable:hover {
                 text-decoration: none;
             }
+
+
     </style>
 </head>
 <body>
@@ -119,24 +157,42 @@
                             </div>
                         </div>
                     </div>
-                    @*<ul class="draggable-list">
+                    <ul class="draggable-list">
                         <li class="draggable ui-state-default">
                             <div class="draggable-content">
                                 <i class="fa fa-font" aria-hidden="true"></i>
-                                Otwarte
+                                Nagłówek
+                            </div>
+                        </li>
+                        <li class="draggable ui-state-default">
+                            <div class="draggable-content">
+                                <i class="fa fa-font" aria-hidden="true"></i>
+                                Stopka
+                            </div>
+                        </li>
+                        <li class="draggable ui-state-default">
+                            <div class="draggable-content">
+                                <i class="fa fa-font" aria-hidden="true"></i>
+                                Zdjęcie
                             </div>
                         </li>
                         
                         <li id="question-template">
                         </li>
-                    </ul>*@
+                    </ul>
                 </div>
             </div>
 
         </div>
         <div class="main_column">
             <div class="website_container" id="website_container">
-
+                <div id="pages-tab-content" class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="page1">
+                        <ul id="sortable1" class="sortable-list">
+                            <li class="empty-element" style="color:black;">Przeciągnij szablon</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -145,5 +201,6 @@
 </html>
 
 @section Scripts{
-    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
+    <script src="~/ScriptsApp/Common/AjaxHelper.js"></script>
+   
 }
