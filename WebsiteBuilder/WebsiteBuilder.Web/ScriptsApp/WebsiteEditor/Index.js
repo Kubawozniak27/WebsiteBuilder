@@ -11,14 +11,21 @@ WebsiteEditor.Index = (function () {
     }
 
     var partialViews = {
-        header: ""
-
+        text: "",
+        image: "",
+        menu: ""
     };
 
 
     $(function () {      
         init();
+        $("#text").numericInput({
 
+            allowFloat: true,
+
+            allowNegative: true
+
+        });
     });
 
     function init() {
@@ -27,6 +34,7 @@ WebsiteEditor.Index = (function () {
         getBaseTemplates();
         initSortable(".sortable-list");
         initDraggable();
+
     }
 
     function initColorPicker() {
@@ -63,7 +71,7 @@ WebsiteEditor.Index = (function () {
 
 
 
-                var templates = partialViews.header;
+                var templates = partialViews.text;
                 questionElement = $.parseHTML(templates);
                 ui.item.replaceWith(questionElement);
                 
@@ -74,7 +82,9 @@ WebsiteEditor.Index = (function () {
 
     function getBaseTemplates() {
         AjaxHelper.get("/WebsiteEditor/GetBaseTemplates", null, function (response) {
-            partialViews.header = response.Header;
+            partialViews.text = response.Text;
+            partialViews.image = response.Image;
+            partialViews.menu = response.Menu;
         });
     }
 

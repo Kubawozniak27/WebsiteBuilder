@@ -10,5 +10,6 @@ namespace WebsiteBuilder.Data.Entities
     {
         public string Name { get; set; }
         public DateTime PublishDate { get; set; }
+        public DateTime EditDate { get; set; }
     }
 }

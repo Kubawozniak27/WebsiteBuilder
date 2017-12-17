@@ -16,7 +16,8 @@ namespace WebsiteBuilder.BusinessLogic.Website.Commands
             var website = new Data.Entities.Website()
             {
                 Name = request.Name,
-                PublishDate = DateTime.Now
+                PublishDate = DateTime.Now,
+                EditDate = DateTime.Now
             };
 
             Db.Websites.Add(website);

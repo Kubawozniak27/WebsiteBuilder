@@ -13,8 +13,12 @@ namespace WebsiteBuilder.Web.Controllers
         // GET: Website
         public ActionResult Index()
         {
-            var websites = GetQuery<GetWebsitesQuery>().Execute();
-            return View(websites);
+            return View();
+        }
+        public JsonResult GetWebsitesPagedTable()
+        {
+            var result = GetQuery<GetWebsitesQuery>().Execute();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -25,10 +29,10 @@ namespace WebsiteBuilder.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult AddWebsite(WebsiteDto websiteDto)
+        public JsonResult AddWebsite(WebsiteDto websiteDto)
         {
             var result = GetCommand<AddWebsiteCommand>().Execute(websiteDto);
-            return View();
+            return ConvertOperationResultToJson(result);
         }
     }
 }

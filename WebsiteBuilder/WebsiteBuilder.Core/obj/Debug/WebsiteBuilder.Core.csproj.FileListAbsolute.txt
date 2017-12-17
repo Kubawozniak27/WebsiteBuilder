@@ -16,6 +16,7 @@ C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuild
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.csproj.CoreCompileInputs.cache
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.dll
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.pdb
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\WebsiteBuilder.Core.dll.config
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\WebsiteBuilder.Core.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\WebsiteBuilder.Core.pdb
@@ -24,13 +25,13 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\Cast
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\EntityFramework.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\EntityFramework.SqlServer.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\FluentValidation.dll
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\System.Linq.Dynamic.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\Validation.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\Castle.Windsor.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\EntityFramework.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\EntityFramework.SqlServer.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\FluentValidation.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\bin\Debug\Validation.xml
-D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.csprojResolveAssemblyReference.cache
-D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.pdb
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Core\obj\Debug\WebsiteBuilder.Core.csprojResolveAssemblyReference.cache

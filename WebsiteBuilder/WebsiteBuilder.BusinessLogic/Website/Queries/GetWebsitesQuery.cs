@@ -16,6 +16,7 @@ namespace WebsiteBuilder.BusinessLogic.Website.Commands
             var websites = Db.Websites.Select(x => new WebsiteDto()
             {
                 Name = x.Name,
+                EditDate = x.EditDate,
                 PublishDate = x.PublishDate,
                 WebsiteId = x.Id
             }).ToList();

@@ -20,7 +20,9 @@ namespace WebsiteBuilder.Web.Controllers
         {
             var vm = new WebsiteEditorViewModel()
             {
-                Header = PartialView("_Header").RenderToString()
+                Text = PartialView("_Text").RenderToString(),
+                Image = PartialView("_Image").RenderToString(),
+                Menu = PartialView("_Menu").RenderToString()
             };
 
             return Json(vm, JsonRequestBehavior.AllowGet);

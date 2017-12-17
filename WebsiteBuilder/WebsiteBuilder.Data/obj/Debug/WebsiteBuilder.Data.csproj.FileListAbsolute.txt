@@ -30,7 +30,6 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\Enti
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\EntityFramework.SqlServer.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\FluentValidation.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\Validation.xml
-D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.csprojResolveAssemblyReference.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.pdb

@@ -1,0 +1,119 @@
+﻿body {
+    background-color: #333333;
+    margin: 0;
+    padding: 0;
+    color: aliceblue;
+}
+
+input :hover {
+    border: none;
+}
+
+input :active {
+    border: none;
+}
+
+ul {
+    list-style: none;
+}
+
+.sortable-list, .draggable-list {
+    border: 2px solid #eee;
+    min-width: 100%;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 10px 0 0;
+    float: left;
+    margin-right: 10px;
+}
+
+    .sortable-list li, .draggable-list li {
+        margin: 5px;
+        padding: 5px;
+        font-size: 1.2em;
+        width: 100%;
+    }
+
+.draggable-content {
+    cursor: move;
+}
+
+.sortable-list li i, .draggable-list li i {
+    margin: 0 0 0 0;
+}
+
+.sortable-list li label, .draggable-list li label {
+    font-size: 0.8em;
+}
+
+.ibox {
+    margin-bottom: 0;
+}
+
+header {
+    background-color: #132026;
+    min-height: 50px;
+    width: 100%;
+}
+
+    header > div:first-child {
+        padding-left: 30px;
+        width: 60%;
+        display: inline-block;
+    }
+
+    header > div:last-child {
+        padding-top: 10px;
+        width: 36%;
+        display: inline-block;
+        text-align: right;
+    }
+
+.left_column {
+    height: 100vh;
+    width: 20%;
+    background-color: #09181F;
+    float: left;
+}
+
+.main_column {
+    height: 100vh;
+    width: 80%;
+    float: left;
+}
+
+.website_container {
+    position: absolute;
+    top: 60px;
+    left: 30%;
+    width: 50%;
+    min-height: 1024px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+    .clickable .glyphicon {
+        background: rgba(0, 0, 0, 0.15);
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px
+    }
+
+.panel-heading span {
+    margin-top: -23px;
+    font-size: 15px;
+    margin-right: -9px;
+}
+
+a.clickable {
+    color: inherit;
+}
+
+    a.clickable:hover {
+        text-decoration: none;
+    }

@@ -11,5 +11,16 @@ namespace WebsiteBuilder.Public.Website
         public int WebsiteId { get; set; }
         public string Name { get; set; }
         public DateTime PublishDate { get; set; }
+        public DateTime EditDate { get; set; }
+        public string PublishDateShortDate
+        {
+            get { return PublishDate.ToShortDateString(); }
+            set { Convert.ToDateTime(value); }
+        }
+        public string EditDateShortDate
+        {
+            get { return EditDate.ToShortDateString(); }
+            set { Convert.ToDateTime(value); }
+        }
     }
 }

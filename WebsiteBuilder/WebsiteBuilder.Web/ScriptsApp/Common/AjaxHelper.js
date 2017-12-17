@@ -10,7 +10,9 @@
         Json: 'json'
     };
 
-    $.ajaxSetup({ cache: false });
+    //$(document).ready(function () {
+    //    $.ajaxSetup({ cache: false });
+    //});
 
     $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
         handleAjaxError(jqxhr, '', thrownError.stack);

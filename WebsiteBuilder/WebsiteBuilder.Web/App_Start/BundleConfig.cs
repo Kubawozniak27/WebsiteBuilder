@@ -26,8 +26,21 @@ namespace WebsiteBuilder.Web
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/Common.css",
+                      "~/Content/font-awesome.css",
                       "~/Content/ColorPicker/bootstrap-colorpicker.min.css",
                       "~/Content/site.css"));
+
+
+            bundles.Add(new ScriptBundle("~/bundle/CommonJs").Include(
+                "~/ScriptsApp/Common/AjaxHelper.js",
+                "~/ScriptsApp/Common/FormHelper.js",
+                "~/Scripts/SmartNotification.js",
+                "~/Scripts/datatables/datatables.min.js",
+                "~/Scripts/moment/moment.js",
+                "~/Scripts/moment/pl.js",
+                "~/ScriptsApp/Common/Startup.js"
+                ));
         }
     }
 }
