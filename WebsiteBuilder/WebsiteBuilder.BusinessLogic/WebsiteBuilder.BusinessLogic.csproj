@@ -70,6 +70,8 @@
     <Compile Include="Infrastructure\CommandBase.cs" />
     <Compile Include="Infrastructure\QueryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebsiteEditor\Commands\SaveWebsiteCommand.cs" />
+    <Compile Include="WebsiteEditor\Queries\GetWebsiteByIdQuery.cs" />
     <Compile Include="Website\Commands\AddWebsiteCommand.cs" />
     <Compile Include="Website\Queries\GetWebsitesQuery.cs" />
   </ItemGroup>
@@ -91,8 +93,6 @@
       <Name>WebsiteBuilder.Public</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WebsiteEditor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

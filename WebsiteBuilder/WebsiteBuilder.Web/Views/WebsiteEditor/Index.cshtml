@@ -1,4 +1,4 @@
-﻿@model WebsiteBuilder.Public.Website.WebsiteDto
+﻿@model WebsiteBuilder.Public.WebsiteEditor.SaveWebsiteEditorDto
 @{
     Layout = null;
 }
@@ -13,19 +13,24 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")   
+    @Scripts.Render("~/bundles/bootstrap")
     <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/ScriptsApp/Common/AjaxHelper.js"></script>
     <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
-    <script src="~/Scripts/numericInput.js"></script>
-
     <link href="~/Content/websiteEditor.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/bootstrap-colorpicker.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
 </head>
 <body>
+
+    @Html.HiddenFor(m => m.WebsiteId)
+
+
     <header>
         <div>Jakub Woźniak strona</div>
-        <div><a class="btn btn-danger">Zapisz</a></div>
+        <div><a class="btn btn-danger" id="save-website-btn">Zapisz</a></div>
     </header>
     <main>
         <div class="left_column">
@@ -42,7 +47,7 @@
                             <div id="changeBackgroundColorBtn" data-format="alias" class="input-group colorpicker-component">
                                 <input type="text" value="primary" class="form-control" />
                                 <span class="input-group-addon"><i></i></span>
-                                <input type="hidden" id="backgroundColorHidden" value="" />
+                                <input type="hidden" id="backgroundColorHidden" value="@Model.WebsiteColor" />
                             </div>
                         </div>
                     </div>
@@ -65,7 +70,7 @@
                                 Zdjęcie
                             </div>
                         </li>
-                        
+
                         <li id="question-template">
                         </li>
                     </ul>
@@ -74,7 +79,7 @@
 
         </div>
         <div class="main_column">
-            <div class="website_container" id="website_container">
+            <div class="website_container" id="website_container" style="background-color:@Model.WebsiteColor">
                 <div id="pages-tab-content" class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="page1">
                         <ul id="sortable1" class="sortable-list">
@@ -90,4 +95,3 @@
 
 </body>
 </html>
-

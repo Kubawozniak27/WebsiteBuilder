@@ -201,8 +201,6 @@ C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\Microsoft.AI.Depend
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\Microsoft.AI.WindowsServer.xml
 C:\repo\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\Microsoft.AI.Web.xml
-D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.csprojResolveAssemblyReference.cache
-D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\ApplicationInsights.config
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\WebsiteBuilder.Web.dll.config
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\WebsiteBuilder.Web.dll
@@ -307,5 +305,7 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\System.Web.
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\System.Web.WebPages.Deployment.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\System.Web.WebPages.Razor.xml
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\Validation.xml
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.csprojResolveAssemblyReference.cache
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.pdb

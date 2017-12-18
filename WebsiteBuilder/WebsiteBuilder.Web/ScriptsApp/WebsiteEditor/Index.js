@@ -7,7 +7,8 @@ WebsiteEditor.Index = (function () {
         selectColor: '#selectColor',
         backgroundColorBtn: '#changeBackgroundColorBtn',
         websiteContainer: '#website_container',
-        backgroundColorHidden: '#backgroundColorHidden'
+        backgroundColorHidden: '#backgroundColorHidden',
+        saveBtn:'#save-website-btn'
     }
 
     var partialViews = {
@@ -19,14 +20,9 @@ WebsiteEditor.Index = (function () {
 
     $(function () {      
         init();
-        $("#text").numericInput({
-
-            allowFloat: true,
-
-            allowNegative: true
-
-        });
     });
+
+    
 
     function init() {
         initPanelClick();
@@ -34,6 +30,21 @@ WebsiteEditor.Index = (function () {
         getBaseTemplates();
         initSortable(".sortable-list");
         initDraggable();
+        $(selectors.saveBtn).click(saveWebsite);
+
+    }
+
+    function saveWebsite() {
+        var websiteColor = $(selectors.backgroundColorHidden).val();
+        var website = {
+            WebsiteId : 1,
+            WebsiteColor: websiteColor
+        };
+
+        AjaxHelper.postAndHandleErrors("/WebsiteEditor/SaveWebsite", { request: website }, null, function () {
+            window.location.href = "/Website/Index";
+        });
+
 
     }
 
@@ -61,8 +72,6 @@ WebsiteEditor.Index = (function () {
         $(sortableSelector).sortable({
             revert: true,
             stop: function (event, ui) {
-                // Ensure that below behaviour is executed only on first drop
-                // (when question is dragged from dragable-list, not dragged from sortable itself).
                 if ($(ui.item).hasClass('already-dropped')) {
                     return;
                 }
@@ -100,18 +109,6 @@ WebsiteEditor.Index = (function () {
 
     function initPanelClick() {
         $(document).on('click', '.panel-heading span.clickable', function (e) {
-            var $this = $(this);
-            if (!$this.hasClass('panel-collapsed')) {
-                $this.parents('.panel').find('.panel-body').slideUp();
-                $this.addClass('panel-collapsed');
-                $this.find('i').removeClass('glyphicon-minus').addClass('glyphicon-plus');
-            } else {
-                $this.parents('.panel').find('.panel-body').slideDown();
-                $this.removeClass('panel-collapsed');
-                $this.find('i').removeClass('glyphicon-plus').addClass('glyphicon-minus');
-            }
-        });
-        $(document).on('click', '.panel div.clickable', function (e) {
             var $this = $(this);
             if (!$this.hasClass('panel-collapsed')) {
                 $this.parents('.panel').find('.panel-body').slideUp();

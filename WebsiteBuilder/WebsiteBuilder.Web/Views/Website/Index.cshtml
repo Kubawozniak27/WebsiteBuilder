@@ -6,9 +6,12 @@
                     <h5>Strony</h5>
                     <div class="ibox-tools">
                         <a href="/Website/AddWebsite" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Zdefiniuj nową stronę</a>
-                        <a id="" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Konfiguruj stronę</a>
-                        <a id="" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Wyświetl stronę</a>
-                        <a id="" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Eksportuj do pliku</a>
+                        <a id="websiteEditorBtn" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Konfiguruj stronę</a>
+                        <a id="showWebsiteBtn" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Wyświetl stronę</a>
+                        <form method="post" action="/Website/GenereteWebsiteToHtml" >
+                            <input type="hidden" value="" id="selectedWebsite" name="websiteId"/>
+                            <button type="submit" id="exportWebsiteToHtmlFileBtn" class="btn btn-primary" disabled><i class="fa fa-pencil" aria-hidden="true"></i>Eksportuj do pliku</button>
+                        </form>
                     </div>
                 </div>
                 <div class="ibox-content">

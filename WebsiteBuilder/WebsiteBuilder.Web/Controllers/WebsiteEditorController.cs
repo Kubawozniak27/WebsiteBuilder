@@ -3,18 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands;
+using WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries;
+using WebsiteBuilder.Public.WebsiteEditor;
 using WebsiteBuilder.Web.Extensions;
 using WebsiteBuilder.Web.Models.WebsiteEditor;
 
 namespace WebsiteBuilder.Web.Controllers
 {
-    public class WebsiteEditorController : Controller
+    public class WebsiteEditorController : BaseController
     {
         // GET: WebsiteEditor
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            return View();
+            var dto = GetQuery<GetWebsiteByIdQuery>().Execute(id);
+            return View("Index", dto);
         }
+
+        [HttpPost]
+        public JsonResult SaveWebsite(SaveWebsiteEditorDto request)
+        {
+            var result = GetCommand<SaveWebsiteCommand>().Execute(request);
+            return ConvertOperationResultToJson(result);
+        }
+
+        
 
         public JsonResult GetBaseTemplates()
         {

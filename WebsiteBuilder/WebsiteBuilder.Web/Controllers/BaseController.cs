@@ -63,8 +63,13 @@ namespace WebsiteBuilder.Web.Controllers
             }
         }
 
+        protected FileResult ReturnFile(byte[] file, string fileName)
+        {
+            return File(file, "text/html", fileName);
+        }
 
-        
+
+
 
 
 

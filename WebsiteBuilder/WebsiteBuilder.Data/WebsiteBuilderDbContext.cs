@@ -16,5 +16,14 @@ namespace WebsiteBuilder.Data
         }
 
         public DbSet<Website> Websites { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Properties()
+              .Where(p => p.Name == "Id")
+              .Configure(p => p.IsKey().HasColumnName(p.ClrPropertyInfo.ReflectedType.Name + "Id"));
+
+        }
     }
 }
