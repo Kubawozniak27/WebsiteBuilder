@@ -1,4 +1,5 @@
 ﻿@model WebsiteBuilder.Public.WebsiteEditor.SaveWebsiteEditorDto
+@using WebsiteBuilder.Public.Image
 @{
     Layout = null;
 }
@@ -14,20 +15,195 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <link href="~/Content/websiteEditor.css" rel="stylesheet" />
+    <link href="~/Content/GridStack/gridstack.css" rel="stylesheet" />
     <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
     <script src="~/ScriptsApp/Common/AjaxHelper.js"></script>
-    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
-    <link href="~/Content/websiteEditor.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
     <script src="~/Scripts/bootstrap-colorpicker.js"></script>
     <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/GridStack/lodash.min.js"></script>
+    <script src="~/Scripts/GridStack/gridstack.js"></script>
+    <script src="~/Scripts/GridStack/gridstack.jQueryUI.js"></script>
+    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
+    <script>
+        var selectors = {
+            selectColorDiv: '#selectColorDiv',
+            selectColor: '#selectColor',
+            backgroundColorBtn: '#changeBackgroundColorBtn',
+            websiteContainer: '#website_container',
+            backgroundColorHidden: '#backgroundColorHidden',
+            saveBtn: '#save-website-btn',
+            addImageBtn: '#add-image-btn',
+            grid: '#grid',
+            addImageHiddenInput: '#add-image-hidden-input',
+            selectImageLabel: '#select-image-label'
+        }
+
+        var grid;
+        var items;
+
+        $(function () {
+            init();
+        });
+
+
+
+        function init() {
+            initColorPicker();
+            initGridStack();
+            $(selectors.saveBtn).click(saveWebsite);
+            $("#add-text-btn").unbind('click').bind('click', function (e) {
+                addNewWidget();
+            });
+
+            $("#imageContainer img").click(function () {
+                var imageSrc = $(this).attr('src');
+                $(selectors.selectImageLabel).hide();
+                $(selectors.addImageBtn).show();
+                $(selectors.addImageHiddenInput).val(imageSrc);
+            });
+
+            $(selectors.addImageBtn).click(function () {
+                var imageSrc = $(selectors.addImageHiddenInput).val();
+                addNewWidgetForImage(imageSrc);
+            })
+        }
+
+        function addNewWidget(imageSrc) {
+            items = getWidgets();
+
+            var maxY = getMaxY();
+
+            var widgetMax = items.find(x => x.y == maxY);
+
+            if (maxY != null) {
+                maxY = maxY + widgetMax.height + 1;
+            }
+            else {
+                maxY = 0;
+            }
+            var node = {
+                x: 0,
+                y: maxY,
+                width: 12,
+                height: 1
+            };
+
+            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><image style="overflow:hidden;max-height:100%;"></textarea></div></div>'),
+                node.x, node.y, node.width, node.height);
+            return false;
+        }
+
+        function initGridStack() {
+            AjaxHelper.get("/WebsiteEditor/GetWebsiteContent", { id: 1 }, function (data) {
+                items = data;
+                var options = {
+                };
+                $(selectors.grid).gridstack(options);
+
+                $(selectors.grid).each(function () {
+                    grid = $(this).data('gridstack');
+
+                    _.each(items.Texts, function (node) {
+                        grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;">' + node.Text + '</textarea> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
+                            node.X, node.Y, node.Width, node.Height)
+
+                    }, this);
+                    return false;
+                });
+            })
+        }
+
+        function getWidgets() {
+            return _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
+                el = $(el);
+                var textareaValue = el.find('textarea').val();
+                var textId = el.find('input[type="hidden"]').val();
+                var node = el.data('_gridstack_node');
+                return {
+                    x: node.x,
+                    y: node.y,
+                    width: node.width,
+                    height: node.height,
+                    text: textareaValue,
+                    id: textId
+                }
+            }, this);
+        }
+
+        function getMaxY() {
+            if (items.length != 0) {
+                return items.reduce((max, p) => p.y > max ? p.y : max, items[0].y);
+            }
+            return null;
+        }
+
+        function addNewWidgetForImage(imageSrc) {
+            items = getWidgets();
+
+            var maxY = getMaxY();
+
+            var widgetMax = items.find(x => x.y == maxY);
+
+            if (maxY != null) {
+                maxY = maxY + widgetMax.height + 1;
+            }
+            else {
+                maxY = 0;
+            }
+            var node = {
+                x: 0,
+                y: maxY,
+                width: 3,
+                height: 3
+            };
+
+            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" style="overflow:hidden;height:auto;width:auto;" /></div></div>'),
+                node.x, node.y, node.width, node.height);
+            return false;
+        };
+
+        function saveWebsite() {
+            var websiteColor = $(selectors.backgroundColorHidden).val();
+
+            var widgets = getWidgets();
+            var website = {
+                WebsiteId: 1,
+                WebsiteColor: websiteColor,
+                Texts: widgets
+            };
+
+            AjaxHelper.postAndHandleErrors("/WebsiteEditor/SaveWebsite", { request: website }, null, function () {
+                window.location.href = "/Website/Index";
+            });
+
+        }
+
+        function initColorPicker() {
+            $(selectors.backgroundColorBtn).colorpicker(
+                {
+                    color: 'Zmien kolor tła',
+                    colorSelectors: {
+                        'red': '#FF0000',
+                        'orange': '#FFA500',
+                        'yellow': '#ffff00',
+                        'limegreen': '#32cd32',
+                        'green': '#00ff00',
+                        'blue': '#0000ff '
+                    }
+                }
+            ).on('changeColor', function (e) {
+                $(selectors.backgroundColorBtn).val(e.color.toString('hex'));
+                $(selectors.backgroundColorHidden).val(e.color.toString('hex'));
+                $(selectors.websiteContainer).css("background-color", e.color.toString('hex'));
+            });
+        }
+    </script>
 </head>
 <body>
 
     @Html.HiddenFor(m => m.WebsiteId)
-
-
     <header>
         <div>Jakub Woźniak strona</div>
         <div><a class="btn btn-danger" id="save-website-btn">Zapisz</a></div>
@@ -41,52 +217,86 @@
                             <h3 class="panel-title">
                                 Kolor tła
                             </h3>
-                            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
                         </div>
                         <div class="panel-body" style="text-align:center;">
-                            <div id="changeBackgroundColorBtn" data-format="alias" class="input-group colorpicker-component">
-                                <input type="text" value="primary" class="form-control" />
-                                <span class="input-group-addon"><i></i></span>
-                                <input type="hidden" id="backgroundColorHidden" value="@Model.WebsiteColor" />
+                            <div id="changeBackgroundColorBtn" class="input-group colorpicker-component">
+                                <input type="text" value="#dd0f20" class="form-control" />
+                                <span class="input-group-addon"><i style="background-color:#dd0f20;"></i></span>
+                                <input type="hidden" id="backgroundColorHidden" value="#dd0f20" />
                             </div>
                         </div>
                     </div>
-                    <ul class="draggable-list">
-                        <li class="draggable ui-state-default">
-                            <div class="draggable-content">
-                                <i class="fa fa-font" aria-hidden="true"></i>
-                                Menu
+                    <div class="panel panel-default" style="margin-top:20px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Import zdjęcia
+                            </h3>
+                        </div>
+                        <div class="panel-body" style="text-align:center;">
+                            @using (Html.BeginForm("UploadImage", "WebsiteEditor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <input type="hidden" name="WebsiteId" value="@Model.WebsiteId" />
+                                <div class="form-group">
+                                    <input type="text" class="col-lg-12 form-control" style="color:black;" name="Title" placeholder="Tytuł..." />
+                                </div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label for="file-upload" class="custom-file-upload col-lg-12">
+                                        <i class="fa fa-cloud-upload"></i> Wybierz plik
+                                    </label>
+                                    <input id="file-upload" type="file" name="ImageFile"/>
+                                </div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <input type="submit" value="Zapisz" class="btn btn-danger" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="panel panel-default" style="margin-top:20px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Tekst
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <div>
+                                    <div>
+                                        <input  type="button" class="btn btn-danger" id="add-text-btn" value="Dodaj tekst"/>
+                                    </div>
+                                </div>
                             </div>
-                        </li>
-                        <li class="draggable ui-state-default">
-                            <div class="draggable-content">
-                                <i class="fa fa-font" aria-hidden="true"></i>
-                                Text
+                        </div>
+                    </div>
+                    <div class="panel panel-default" style="margin-top:20px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Zdjęcia
+                            </h3>
+                        </div>
+                        <div class="panel-body" id="imageContainer">
+                            <div>
+                                <label id="select-image-label">Wybierz zdjęcie</label>
+                                <input type="hidden" id="add-image-hidden-input" value="" />
+                                <input type="button" class="btn btn-danger" style="display:none;" id="add-image-btn" value="Dodaj zdjęcie" />
                             </div>
-                        </li>
-                        <li class="draggable ui-state-default">
-                            <div class="draggable-content">
-                                <i class="fa fa-font" aria-hidden="true"></i>
-                                Zdjęcie
-                            </div>
-                        </li>
-
-                        <li id="question-template">
-                        </li>
-                    </ul>
+                            @foreach (var image in Model.Images)
+                            {
+                                <img src="@Url.Content(image.FilePath)" height="100" width="100" />
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
         <div class="main_column">
-            <div class="website_container" id="website_container" style="background-color:@Model.WebsiteColor">
-                <div id="pages-tab-content" class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="page1">
-                        <ul id="sortable1" class="sortable-list">
-                            <li class="empty-element" style="color:black;">Przeciągnij szablon</li>
-                        </ul>
-                    </div>
-                    <div>
+            <div class="website_container" id="website_container" style="background-color:@Model.WebsiteColor !important;">
+                <div class="container-fluid">
+                    <div class="grid-stack" id="grid">
                     </div>
                 </div>
             </div>
@@ -95,3 +305,7 @@
 
 </body>
 </html>
+
+@section Scripts{
+    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
+}

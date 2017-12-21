@@ -12,5 +12,7 @@ namespace WebsiteBuilder.Data.Entities
         public DateTime PublishDate { get; set; }
         public DateTime EditDate { get; set; }
         public string Color { get; set; }
+        public virtual List<WebsiteText> WebsiteTexts { get; set; }
+        public virtual List<WebsiteImage> WebsiteImages { get; set; }
     }
 }

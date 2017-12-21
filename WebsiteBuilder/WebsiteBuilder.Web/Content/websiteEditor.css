@@ -91,18 +91,9 @@ header {
     min-height: 1024px;
     border: 1px solid black;
     background-color: white;
+    color:black !important;
 }
 
-.clickable {
-    cursor: pointer;
-}
-
-    .clickable .glyphicon {
-        background: rgba(0, 0, 0, 0.15);
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 4px
-    }
 
 .panel-heading span {
     margin-top: -23px;
@@ -110,10 +101,21 @@ header {
     margin-right: -9px;
 }
 
-a.clickable {
-    color: inherit;
+.grid-stack-item-content {
+    color: #2c3e50;
+    text-align: center;
+    background-color: #18bc9c;
 }
 
-    a.clickable:hover {
-        text-decoration: none;
-    }
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-top:10px; 
+    padding: 10px;
+    cursor: pointer;
+    background-color: #d3394c;
+}

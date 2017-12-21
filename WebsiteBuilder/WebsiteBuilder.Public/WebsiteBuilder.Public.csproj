@@ -63,7 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\ImageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\TextDto.cs" />
     <Compile Include="WebsiteEditor\SaveWebsiteEditorDto.cs" />
     <Compile Include="Website\WebsiteDto.cs" />
   </ItemGroup>

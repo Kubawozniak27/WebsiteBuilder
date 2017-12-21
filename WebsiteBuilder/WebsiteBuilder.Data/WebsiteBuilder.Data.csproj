@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BaseEntity.cs" />
+    <Compile Include="Entities\WebsiteImage.cs" />
+    <Compile Include="Entities\WebsiteText.cs" />
     <Compile Include="Entities\Website.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebsiteBuilderDbContext.cs" />

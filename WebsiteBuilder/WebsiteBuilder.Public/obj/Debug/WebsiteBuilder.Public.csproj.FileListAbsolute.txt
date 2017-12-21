@@ -33,3 +33,4 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Public\bin\Debug\Va
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Public\obj\Debug\WebsiteBuilder.Public.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Public\obj\Debug\WebsiteBuilder.Public.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Public\obj\Debug\WebsiteBuilder.Public.pdb
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Public\obj\Debug\WebsiteBuilder.Public.csprojResolveAssemblyReference.cache

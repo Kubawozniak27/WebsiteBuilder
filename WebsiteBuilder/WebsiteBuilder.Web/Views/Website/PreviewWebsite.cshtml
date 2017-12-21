@@ -2,6 +2,13 @@
 
 @{
     Layout = null;
+
+    var tmp = Model.Texts.GroupBy(x => x.Y).Select(y => new
+    {
+        Y = y.Key,
+        Properties = y.ToList()
+    });
+    var xd = tmp;
 }
 
 <!DOCTYPE html>
@@ -9,9 +16,43 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title></title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
 </head>
 <body style="background-color:@Model.WebsiteColor">
-    <div> 
+    <div style="padding:40px;">
+        @foreach (var i in tmp)
+        {
+            var first = 0;
+            <div class="row" style="margin-bottom:20px;">
+                @foreach (var item in i.Properties.OrderBy(x=>x.X))
+                {
+                    int colMargin = 0;
+                    if(item.X == 0)
+                    {
+                        first = item.Width;
+                    }
+                    else if(item.X != 0 && first == 0)
+                    {
+                        colMargin = item.X;
+                        first = item.Width + colMargin;
+                    }
+                    else
+                    {
+                        colMargin = item.X - first;
+                        first = item.X + item.Width;
+                    }
+                    string colMarginString = colMargin != 0 ? "col-lg-offset-" + colMargin : "";
+                    string colWidth = String.Format("col-lg-{0} {1}", item.Width, colMarginString);
+                    int tmp1 = item.Height * 20;
+                    string height = String.Format("min-height: {0}px;", tmp1);
+
+                    <div class="@colWidth" style="@height">
+                        @item.Text
+                    </div>
+                }
+            </div>
+        }
+
     </div>
 </body>
 </html>
