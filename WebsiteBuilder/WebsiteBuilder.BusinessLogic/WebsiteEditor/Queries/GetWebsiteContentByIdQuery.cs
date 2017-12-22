@@ -8,6 +8,7 @@ using WebsiteBuilder.Core.Service;
 using WebsiteBuilder.Public.WebsiteEditor;
 using System.Data.Entity;
 using WebsiteBuilder.Public.Text;
+using WebsiteBuilder.Public.Website;
 
 namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
 {
@@ -19,19 +20,43 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                 .Include(x => x.WebsiteTexts)
                 .FirstOrDefault(x => x.Id == request);
 
+            
+
+
+            var texts = website.WebsiteTexts.Select(x => new WebsiteContentDto()
+            {
+                Id = x.Id,
+                Text = x.Text,
+                X = x.CoordinateX,
+                Y = x.CoordinateY,
+                Height = x.Height,
+                Width = x.Width,
+                WebsiteElementType = WebsiteElementType.Text
+            });
+
+            var images = website.WebsiteImages.Where(x => x.IsDeleted == false).Select(x => new WebsiteContentDto()
+            {
+                Id = x.Id,
+                ImageSrc = x.FilePath,
+                X = x.CoordinateX,
+                Y = x.CoordinateY,
+                Height = x.Height,
+                Width = x.Width,
+                WebsiteElementType = WebsiteElementType.Image
+            });
+
+            var websiteContents = new List<WebsiteContentDto>();
+
+            websiteContents.AddRange(texts);
+            websiteContents.AddRange(images);
+
             var result = new SaveWebsiteEditorDto()
             {
                 WebsiteId = website.Id,
                 WebsiteColor = website.Color,
-                Texts = website.WebsiteTexts.Select(x => new TextDto()
-                {
-                    Text = x.Text,
-                    Width = x.Width,
-                    Height = x.Height,
-                    X = x.CoordinateX,
-                    Y = x.CoordinateY
-                }).ToList()
+                WebsiteContents = websiteContents
             };
+
 
             return result;
         }

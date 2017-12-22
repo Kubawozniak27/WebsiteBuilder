@@ -13,6 +13,8 @@ namespace WebsiteBuilder.Public.WebsiteEditor
         public int WebsiteId { get; set; }
         public string WebsiteName { get; set; }
         public string WebsiteColor { get; set; }
+        public ICollection<WidgetToRemoveDto> WidgetsToRemove { get; set; }
+        public List<WebsiteContentDto> WebsiteContents { get; set; }
         public List<TextDto> Texts { get; set; }
         public List<ImageDto> Images { get; set; }
     }

@@ -37,11 +37,20 @@
             addImageBtn: '#add-image-btn',
             grid: '#grid',
             addImageHiddenInput: '#add-image-hidden-input',
-            selectImageLabel: '#select-image-label'
+            selectImageLabel: '#select-image-label',
+            addTextBtn: '#add-text-btn',
+            websiteIdHidden: '#WebsiteId',
+            deleteWidget: '.deleteWidget'
+        }
+
+        var websiteElementType = {
+            text: 1,
+            image: 2
         }
 
         var grid;
         var items;
+        var itemsToDelelete = [];
 
         $(function () {
             init();
@@ -53,9 +62,7 @@
             initColorPicker();
             initGridStack();
             $(selectors.saveBtn).click(saveWebsite);
-            $("#add-text-btn").unbind('click').bind('click', function (e) {
-                addNewWidget();
-            });
+
 
             $("#imageContainer img").click(function () {
                 var imageSrc = $(this).attr('src');
@@ -64,13 +71,23 @@
                 $(selectors.addImageHiddenInput).val(imageSrc);
             });
 
-            $(selectors.addImageBtn).click(function () {
-                var imageSrc = $(selectors.addImageHiddenInput).val();
-                addNewWidgetForImage(imageSrc);
-            })
+            $(selectors.addTextBtn).click(addNewWidgetForText);
+
+            $(selectors.addImageBtn).click(addNewWidgetForImage);
+
+
         }
 
-        function addNewWidget(imageSrc) {
+        function addNewWidgetForText() {
+            addNewWidget(websiteElementType.text);
+        }
+
+        function addNewWidgetForImage() {
+            var imageSrc = $(selectors.addImageHiddenInput).val();
+            addNewWidget(websiteElementType.image, imageSrc);
+        }
+
+        function addNewWidget(websiteElement, imageSrc) {
             items = getWidgets();
 
             var maxY = getMaxY();
@@ -83,51 +100,137 @@
             else {
                 maxY = 0;
             }
-            var node = {
-                x: 0,
-                y: maxY,
-                width: 12,
-                height: 1
-            };
 
-            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><image style="overflow:hidden;max-height:100%;"></textarea></div></div>'),
-                node.x, node.y, node.width, node.height);
+            var widgetDefinition;
+            var node;
+
+            if (websiteElement == websiteElementType.image) {
+                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" style="overflow:hidden;height:auto;width:auto;" /><div class="deleteWidget">&times;</div></div></div>';
+                node = {
+                    x: 0,
+                    y: maxY,
+                    width: 3,
+                    height: 2
+                };
+            }
+            else if (websiteElement == websiteElementType.text) {
+                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;"></textarea><div class="deleteWidget">&times;</div></div></div>';
+                node = {
+                    x: 0,
+                    y: maxY,
+                    width: 12,
+                    height: 1
+                }
+            }
+
+            grid.addWidget($(widgetDefinition), node.x, node.y, node.width, node.height);
+
             return false;
         }
 
+
         function initGridStack() {
-            AjaxHelper.get("/WebsiteEditor/GetWebsiteContent", { id: 1 }, function (data) {
+            var websiteId = $(selectors.websiteIdHidden).val();
+
+            AjaxHelper.get("/WebsiteEditor/GetWebsiteContent", { id: websiteId }, function (data) {
                 items = data;
                 var options = {
                 };
                 $(selectors.grid).gridstack(options);
-
                 $(selectors.grid).each(function () {
                     grid = $(this).data('gridstack');
 
-                    _.each(items.Texts, function (node) {
-                        grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;">' + node.Text + '</textarea> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
-                            node.X, node.Y, node.Width, node.Height)
+                    _.each(items.WebsiteContents, function (node) {
+                        if (node.WebsiteElementType == websiteElementType.image) {
+                            node.ImageSrc = node.ImageSrc.replace("~", "");
+                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><img src="' + node.ImageSrc + '" style="overflow:hidden;height:auto;width:auto;" /><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
+                                node.X, node.Y, node.Width, node.Height)
+                        }
+                        else if (node.WebsiteElementType == websiteElementType.text) {
+                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;">' + node.Text + '</textarea><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
+                                node.X, node.Y, node.Width, node.Height)
+                        }
 
                     }, this);
+                    $(selectors.deleteWidget).click(function () {
+                        var widgetId;
+                        var context = this;
+                        var widgetTypeTmp = $(this).prev();
+                        debugger;
+                        var widgetType = $(widgetTypeTmp).prop('tagName') == "IMG" ? websiteElementType.image : websiteElementType.text;
+                        debugger;
+                        var item = $(this).parent().parent();
+                        var id = $(this).next().val();
+                        var coordinateX = item.data('gs-x');
+                        var coordinateY = item.data('gs-y');
+                        var height = item.data('gs-height');
+                        var width = item.data('gs-width');
+
+                        if (id) {
+                            var websiteToDelete = {};
+                            websiteToDelete.Id = id;
+                            websiteToDelete.WebsiteElementType = widgetType;
+                            itemsToDelelete.push(websiteToDelete);
+                        }
+                        getWidgetsAsync();
+                        getWidgetIdFromArrayAndDelete(context);
+
+                        function getWidgetsAsync() {
+                            setTimeout(function () {
+                                items = getWidgets();
+                            }, 100);
+                        }
+                        function getWidgetIdFromArrayAndDelete(context) {
+                            setTimeout(function () {
+                                widgetId = getWidgetIdFromArray(coordinateX, coordinateY);
+                                deleteWidget(widgetId, context);
+                            }, 200);
+                        }
+                        function deleteWidget(widgetId, ciaobella) {
+                            setTimeout(function () {
+                                if (widgetId > -1) {
+                                    items.splice(widgetId, 1);
+                                    let deleteWidget = $(context).closest(".grid-stack-item");
+                                    grid.removeWidget(deleteWidget);
+                                }
+                            }, 250);
+                        }
+                    });
                     return false;
                 });
             })
+        }
+
+        function getWidgetIdFromArray(coordinateX, coordinateY) {
+            var result;
+            items.filter(function (e, index) {
+                if (e.x == coordinateX && e.y == coordinateY) {
+                    result = index;
+                    return true;
+                }
+            });
+            return result;
         }
 
         function getWidgets() {
             return _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
                 el = $(el);
                 var textareaValue = el.find('textarea').val();
-                var textId = el.find('input[type="hidden"]').val();
+                var imageSrc = el.find('img').attr("src");
+                var elementId = el.find('input[type="hidden"]').val();
                 var node = el.data('_gridstack_node');
+
+                var type = imageSrc != null ? websiteElementType.image : websiteElementType.text;
+
                 return {
                     x: node.x,
                     y: node.y,
                     width: node.width,
                     height: node.height,
                     text: textareaValue,
-                    id: textId
+                    imageSrc: imageSrc,
+                    id: elementId,
+                    websiteElementType: type
                 }
             }, this);
         }
@@ -139,39 +242,15 @@
             return null;
         }
 
-        function addNewWidgetForImage(imageSrc) {
-            items = getWidgets();
-
-            var maxY = getMaxY();
-
-            var widgetMax = items.find(x => x.y == maxY);
-
-            if (maxY != null) {
-                maxY = maxY + widgetMax.height + 1;
-            }
-            else {
-                maxY = 0;
-            }
-            var node = {
-                x: 0,
-                y: maxY,
-                width: 3,
-                height: 3
-            };
-
-            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" style="overflow:hidden;height:auto;width:auto;" /></div></div>'),
-                node.x, node.y, node.width, node.height);
-            return false;
-        };
-
         function saveWebsite() {
             var websiteColor = $(selectors.backgroundColorHidden).val();
-
+            var websiteId = $(selectors.websiteIdHidden).val();
             var widgets = getWidgets();
             var website = {
-                WebsiteId: 1,
+                WebsiteId: websiteId,
                 WebsiteColor: websiteColor,
-                Texts: widgets
+                WebsiteContents: widgets,
+                WidgetsToRemove: itemsToDelelete
             };
 
             AjaxHelper.postAndHandleErrors("/WebsiteEditor/SaveWebsite", { request: website }, null, function () {
@@ -205,7 +284,7 @@
 
     @Html.HiddenFor(m => m.WebsiteId)
     <header>
-        <div>Jakub Woźniak strona</div>
+        <div>@Model.WebsiteName strona</div>
         <div><a class="btn btn-danger" id="save-website-btn">Zapisz</a></div>
     </header>
     <main>
@@ -243,7 +322,7 @@
                                     <label for="file-upload" class="custom-file-upload col-lg-12">
                                         <i class="fa fa-cloud-upload"></i> Wybierz plik
                                     </label>
-                                    <input id="file-upload" type="file" name="ImageFile"/>
+                                    <input id="file-upload" type="file" name="ImageFile" />
                                 </div>
                                 <div>
                                     <div>
@@ -265,7 +344,7 @@
                             <div>
                                 <div>
                                     <div>
-                                        <input  type="button" class="btn btn-danger" id="add-text-btn" value="Dodaj tekst"/>
+                                        <input type="button" class="btn btn-danger" id="add-text-btn" value="Dodaj tekst" />
                                     </div>
                                 </div>
                             </div>

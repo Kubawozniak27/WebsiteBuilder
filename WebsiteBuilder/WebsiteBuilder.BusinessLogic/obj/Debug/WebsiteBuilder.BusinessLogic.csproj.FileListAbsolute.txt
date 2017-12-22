@@ -53,3 +53,6 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\obj\D
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\obj\Debug\WebsiteBuilder.BusinessLogic.csproj.CoreCompileInputs.cache
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\obj\Debug\WebsiteBuilder.BusinessLogic.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\obj\Debug\WebsiteBuilder.BusinessLogic.pdb
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\bin\Debug\EntityFramework.Extended.dll
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\bin\Debug\EntityFramework.Extended.xml
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.BusinessLogic\bin\Debug\EntityFramework.Extended.dll.config

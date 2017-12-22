@@ -34,7 +34,7 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                     X = x.CoordinateX,
                     Y = x.CoordinateY
                 }).ToList(),
-                Images = website.WebsiteImages.Select(x=>new ImageDto()
+                Images = website.WebsiteImages.Select(x => new ImageDto()
                 {
                     ImageId = x.Id,
                     WebsiteId = x.WebsiteId,

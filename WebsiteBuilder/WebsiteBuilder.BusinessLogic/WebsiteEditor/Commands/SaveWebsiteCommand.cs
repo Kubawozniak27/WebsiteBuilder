@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WebsiteBuilder.BusinessLogic.Infrastructure;
 using WebsiteBuilder.Core.Service;
+using WebsiteBuilder.Public.Website;
 using WebsiteBuilder.Public.WebsiteEditor;
+using EntityFramework.Extensions;
 
 
 namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
@@ -19,35 +21,91 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
 
             website.Color = request.WebsiteColor;
 
-            var addWebsiteText = request.Texts.Where(x => x.Id == null).ToList();
-            var updateWebsiteText = request.Texts.Where(x => x.Id != null).ToList();
+            var addWebsiteContent = request.WebsiteContents.Where(x => x.Id == null).ToList();
+            var updateWebsiteContent = request.WebsiteContents.Where(x => x.Id != null).ToList();
 
-            foreach (var item in updateWebsiteText)
+
+            if(request.WidgetsToRemove != null)
             {
-                var tmp = Db.WebsiteTexts.Single(x => x.Id == item.Id);
-
-                tmp.Height = item.Height;
-                tmp.Width = item.Width;
-                tmp.CoordinateX = item.X;
-                tmp.CoordinateY = item.Y;
-                tmp.Text = item.Text;
-            }
-            Db.SaveChanges();
-
-            foreach (var text in addWebsiteText)
-            {
-                var textEnitity = new Data.Entities.WebsiteText()
+                foreach (var item in request.WidgetsToRemove)
                 {
-                    WebsiteId = request.WebsiteId,
-                    CoordinateX = text.X,
-                    CoordinateY = text.Y,
-                    Height = text.Height,
-                    Width = text.Width,
-                    Text = text.Text
-                };
-                Db.WebsiteTexts.Add(textEnitity);
+                    if (item.WebsiteElementType == WebsiteElementType.Image)
+                    {
+                        var tmp = Db.WebsiteImages.First(x => x.Id == item.Id);
+                        Db.WebsiteImages.Remove(tmp);
+                    }
+                    else
+                    {
+                        var tmp = Db.WebsiteTexts.First(x => x.Id == item.Id);
+                        Db.WebsiteTexts.Remove(tmp);
+                    }
+                }
+                Db.SaveChanges();
             }
-            Db.SaveChanges();
+            
+            if(updateWebsiteContent.Count > 0)
+            {
+                foreach (var item in updateWebsiteContent)
+                {
+                    if (item.ImageSrc != null)
+                    {
+                        var tmp = Db.WebsiteImages.First(x => x.Id == item.Id);
+                        tmp.Height = item.Height;
+                        tmp.Width = item.Width;
+                        tmp.CoordinateX = item.X;
+                        tmp.CoordinateY = item.Y;
+                    }
+                    else if (item.Text != null)
+                    {
+                        var tmp = Db.WebsiteTexts.First(x => x.Id == item.Id);
+                        tmp.Height = item.Height;
+                        tmp.Width = item.Width;
+                        tmp.CoordinateX = item.X;
+                        tmp.CoordinateY = item.Y;
+                        tmp.Text = item.Text;
+                    }
+
+                }
+                Db.SaveChanges();
+            }
+
+            if(addWebsiteContent.Count > 0)
+            {
+                foreach (var content in addWebsiteContent)
+                {
+                    if (content.WebsiteElementType == WebsiteElementType.Text)
+                    {
+                        var textEnitity = new Data.Entities.WebsiteText()
+                        {
+                            WebsiteId = request.WebsiteId,
+                            CoordinateX = content.X,
+                            CoordinateY = content.Y,
+                            Height = content.Height,
+                            Width = content.Width,
+                            Text = content.Text
+                        };
+                        Db.WebsiteTexts.Add(textEnitity);
+                    }
+                    else
+                    {
+                        var imageEnitity = new Data.Entities.WebsiteImage()
+                        {
+                            WebsiteId = request.WebsiteId,
+                            CoordinateX = content.X,
+                            CoordinateY = content.Y,
+                            Height = content.Height,
+                            Width = content.Width,
+                            IsDeleted = false,
+                            FilePath = content.ImageSrc
+                        };
+                        Db.WebsiteImages.Add(imageEnitity);
+                    }
+
+                }
+                Db.SaveChanges();
+            }
+
+            
 
 
             return new OperationResult();

@@ -26,7 +26,7 @@ namespace WebsiteBuilder.Web.Controllers
 
         public JsonResult GetWebsiteContent(int id)
         {
-            var dto = GetQuery<GetWebsiteByIdQuery>().Execute(id);
+            var dto = GetQuery<GetWebsiteContentByIdQuery>().Execute(id);
             return Json(dto, JsonRequestBehavior.AllowGet);
         }
 

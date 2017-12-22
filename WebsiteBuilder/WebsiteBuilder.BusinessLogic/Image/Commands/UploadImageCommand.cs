@@ -18,6 +18,7 @@ namespace WebsiteBuilder.BusinessLogic.Image.Commands
                 WebsiteId = request.WebsiteId,
                 FilePath = request.FilePath,
                 Title = request.Title,
+                IsDeleted = true,
             });
 
             Db.SaveChanges();
