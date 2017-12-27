@@ -90,13 +90,11 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                     {
                         var imageEnitity = new Data.Entities.WebsiteImage()
                         {
-                            WebsiteId = request.WebsiteId,
                             CoordinateX = content.X,
                             CoordinateY = content.Y,
                             Height = content.Height,
                             Width = content.Width,
-                            IsDeleted = false,
-                            FilePath = content.ImageSrc
+                            ImageId = content.ImageId
                         };
                         Db.WebsiteImages.Add(imageEnitity);
                     }

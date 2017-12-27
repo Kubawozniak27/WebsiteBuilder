@@ -13,6 +13,6 @@ namespace WebsiteBuilder.Data.Entities
         public DateTime EditDate { get; set; }
         public string Color { get; set; }
         public virtual List<WebsiteText> WebsiteTexts { get; set; }
-        public virtual List<WebsiteImage> WebsiteImages { get; set; }
+        public virtual List<Image> Images { get; set; }
     }
 }

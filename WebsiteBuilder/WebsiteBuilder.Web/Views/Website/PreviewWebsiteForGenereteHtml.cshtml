@@ -1,0 +1,72 @@
+﻿@model WebsiteBuilder.Public.WebsiteEditor.SaveWebsiteEditorDto
+
+@{
+    Layout = null;
+
+    var groupWebsiteContent = Model.WebsiteContents.OrderBy(x => x.Y).GroupBy(x => x.Y).Select(y => new
+    {
+        Y = y.Key,
+        Properties = y.ToList()
+    });
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+</head>
+<body style="background-color:@Model.WebsiteColor">
+    <div style="padding:40px;">
+        @foreach (var i in groupWebsiteContent)
+        {
+            var first = 0;
+            <div class="row" style="margin-bottom:20px;">
+                @foreach (var item in i.Properties.OrderBy(x => x.X))
+                {
+                    int colMargin = 0;
+                    if (item.X == 0)
+                    {
+                        first = item.Width;
+                    }
+                    else if (item.X != 0 && first == 0)
+                    {
+                        colMargin = item.X;
+                        first = item.Width + colMargin;
+                    }
+                    else
+                    {
+                        colMargin = item.X - first;
+                        first = item.X + item.Width;
+                    }
+                    string colMarginString = colMargin != 0 ? "col-lg-offset-" + colMargin : "";
+                    string colWidth = String.Format("col-lg-{0} {1}", item.Width, colMarginString);
+                    int tmpHeightForText = item.Height * 20;
+                    string height = String.Format("min-height: {0}px;", tmpHeightForText);
+
+                    string tmpHeightForImage = item.Height * 70 + "px;";
+                    if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
+                    {
+
+                        <div class="@colWidth" style="@height ;display:flex;">
+                            @{ 
+                                var imageSrc = item.ImageSrc.Replace("~/Images","Images");
+                            }
+                            <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="@colWidth" style="@height">
+                            @item.Text
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+    </div>
+</body>
+</html>

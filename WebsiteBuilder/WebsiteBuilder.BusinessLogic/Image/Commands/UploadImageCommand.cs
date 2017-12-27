@@ -13,12 +13,11 @@ namespace WebsiteBuilder.BusinessLogic.Image.Commands
     {
         public OperationResult Execute(ImageDto request)
         {
-            Db.WebsiteImages.Add(new Data.Entities.WebsiteImage()
+            Db.Images.Add(new Data.Entities.Image()
             {
-                WebsiteId = request.WebsiteId,
-                FilePath = request.FilePath,
-                Title = request.Title,
-                IsDeleted = true,
+                ImagePath = request.ImagePath,
+                ImageName = request.ImageFile.FileName,
+                WebsiteId = request.WebsiteId
             });
 
             Db.SaveChanges();

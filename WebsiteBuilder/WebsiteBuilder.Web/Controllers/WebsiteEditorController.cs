@@ -49,7 +49,7 @@ namespace WebsiteBuilder.Web.Controllers
             string fileName = Path.GetFileNameWithoutExtension(request.ImageFile.FileName);
             string extension = Path.GetExtension(request.ImageFile.FileName);
             fileName += extension;
-            request.FilePath = "~/Images/" + fileName;
+            request.ImagePath = "~/Images/" + fileName;
             fileName = Path.Combine(Server.MapPath("~/Images/"), fileName);
 
             var result = GetCommand<UploadImageCommand>().Execute(request);
@@ -65,17 +65,7 @@ namespace WebsiteBuilder.Web.Controllers
 
 
 
-        public JsonResult GetBaseTemplates()
-        {
-            var vm = new WebsiteEditorViewModel()
-            {
-                Text = PartialView("_Text").RenderToString(),
-                Image = PartialView("_Image").RenderToString(),
-                Menu = PartialView("_Menu").RenderToString()
-            };
-
-            return Json(vm, JsonRequestBehavior.AllowGet);
-        }
+        
 
 
     }

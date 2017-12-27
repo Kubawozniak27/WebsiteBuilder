@@ -308,3 +308,5 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\Websi
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\obj\Debug\WebsiteBuilder.Web.pdb
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\DotNetZip.dll
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Web\bin\DotNetZip.xml

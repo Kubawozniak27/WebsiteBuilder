@@ -18,6 +18,7 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
         {
             var website = Db.Websites
                 .Include(x => x.WebsiteTexts)
+                .Include(x => x.Images)
                 .FirstOrDefault(x => x.Id == websiteId);
 
             var result = new SaveWebsiteEditorDto()
@@ -34,12 +35,11 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                     X = x.CoordinateX,
                     Y = x.CoordinateY
                 }).ToList(),
-                Images = website.WebsiteImages.Select(x => new ImageDto()
+                Images = website.Images.Select(x => new ImageDto()
                 {
                     ImageId = x.Id,
                     WebsiteId = x.WebsiteId,
-                    FilePath = x.FilePath,
-                    Title = x.Title
+                    ImagePath = x.ImagePath
                 }).ToList()
             };
 

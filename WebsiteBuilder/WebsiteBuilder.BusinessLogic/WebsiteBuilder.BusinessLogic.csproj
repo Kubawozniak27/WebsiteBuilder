@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\Commands\UploadImageCommand.cs" />
+    <Compile Include="Image\Queries\GetImagesByWebsiteIdQuery.cs" />
     <Compile Include="Infrastructure\CommandBase.cs" />
     <Compile Include="Infrastructure\QueryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,8 +99,6 @@
       <Name>WebsiteBuilder.Public</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Image\Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

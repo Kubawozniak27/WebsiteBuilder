@@ -18,10 +18,8 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
         {
             var website = Db.Websites
                 .Include(x => x.WebsiteTexts)
+                .Include(x => x.Images)
                 .FirstOrDefault(x => x.Id == request);
-
-            
-
 
             var texts = website.WebsiteTexts.Select(x => new WebsiteContentDto()
             {
@@ -34,16 +32,33 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                 WebsiteElementType = WebsiteElementType.Text
             });
 
-            var images = website.WebsiteImages.Where(x => x.IsDeleted == false).Select(x => new WebsiteContentDto()
+            var websiteImages = Db.Images
+                .Include(x => x.WebsiteImages)
+                .Where(x => x.WebsiteId == request).ToList();
+
+
+            var images = new List<WebsiteContentDto>();
+
+            foreach (var image in websiteImages)
             {
-                Id = x.Id,
-                ImageSrc = x.FilePath,
-                X = x.CoordinateX,
-                Y = x.CoordinateY,
-                Height = x.Height,
-                Width = x.Width,
-                WebsiteElementType = WebsiteElementType.Image
-            });
+                foreach (var websiteImage in image.WebsiteImages)
+                {
+                    images.Add(new WebsiteContentDto()
+                    {
+                        Id = websiteImage.Id,
+                        ImageId = image.Id,
+                        ImageSrc = image.ImagePath,
+                        WebsiteElementType = WebsiteElementType.Image,
+                        Height = websiteImage.Height,
+                        Width = websiteImage.Width,
+                        X = websiteImage.CoordinateX,
+                        Y = websiteImage.CoordinateY
+                    });
+                }
+            }
+
+
+            
 
             var websiteContents = new List<WebsiteContentDto>();
 

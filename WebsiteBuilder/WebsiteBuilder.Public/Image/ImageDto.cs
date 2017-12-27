@@ -10,10 +10,8 @@ namespace WebsiteBuilder.Public.Image
     public class ImageDto
     {
         public int ImageId { get; set; }
-        public string Title { get; set; }
-        public string FilePath { get; set; }
+        public string ImagePath { get; set; }
         public int WebsiteId { get; set; }
-        public bool IsDeleted { get; set; }
         public HttpPostedFileBase ImageFile { get; set; }
     }
 }

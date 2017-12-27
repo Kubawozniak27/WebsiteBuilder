@@ -3,35 +3,35 @@
 @{
     Layout = null;
 
-    var tmp = Model.Texts.GroupBy(x => x.Y).Select(y => new
+    var groupWebsiteContent = Model.WebsiteContents.OrderBy(x=>x.Y).GroupBy(x => x.Y).Select(y => new
     {
         Y = y.Key,
         Properties = y.ToList()
     });
-    var xd = tmp;
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
     <title></title>
-    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 </head>
 <body style="background-color:@Model.WebsiteColor">
     <div style="padding:40px;">
-        @foreach (var i in tmp)
+        @foreach (var i in groupWebsiteContent)
         {
             var first = 0;
             <div class="row" style="margin-bottom:20px;">
-                @foreach (var item in i.Properties.OrderBy(x=>x.X))
+                @foreach (var item in i.Properties.OrderBy(x => x.X))
                 {
                     int colMargin = 0;
-                    if(item.X == 0)
+                    if (item.X == 0)
                     {
                         first = item.Width;
                     }
-                    else if(item.X != 0 && first == 0)
+                    else if (item.X != 0 && first == 0)
                     {
                         colMargin = item.X;
                         first = item.Width + colMargin;
@@ -43,12 +43,23 @@
                     }
                     string colMarginString = colMargin != 0 ? "col-lg-offset-" + colMargin : "";
                     string colWidth = String.Format("col-lg-{0} {1}", item.Width, colMarginString);
-                    int tmp1 = item.Height * 20;
-                    string height = String.Format("min-height: {0}px;", tmp1);
+                    int tmpHeightForText = item.Height * 20;
+                    string height = String.Format("min-height: {0}px;", tmpHeightForText);
 
-                    <div class="@colWidth" style="@height">
-                        @item.Text
-                    </div>
+                    string tmpHeightForImage = item.Height * 70+"px;";
+                    if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
+                    {
+
+                        <div class="@colWidth" style="@height ;display:flex;">
+                            <img src="@Url.Content(item.ImageSrc)" style="width:100%;height:@tmpHeightForImage" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="@colWidth" style="@height">
+                            @item.Text
+                        </div>
+                    }
                 }
             </div>
         }

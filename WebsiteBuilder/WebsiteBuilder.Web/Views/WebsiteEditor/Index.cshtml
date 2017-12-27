@@ -36,7 +36,8 @@
             saveBtn: '#save-website-btn',
             addImageBtn: '#add-image-btn',
             grid: '#grid',
-            addImageHiddenInput: '#add-image-hidden-input',
+            addImageSrcHiddenInput: '#add-image-src-hidden-input',
+            addImageIdHiddenInput: '#add-image-id-hidden-input',
             selectImageLabel: '#select-image-label',
             addTextBtn: '#add-text-btn',
             websiteIdHidden: '#WebsiteId',
@@ -66,9 +67,12 @@
 
             $("#imageContainer img").click(function () {
                 var imageSrc = $(this).attr('src');
+                var imageId = $(this).attr('value');
+                debugger;
                 $(selectors.selectImageLabel).hide();
                 $(selectors.addImageBtn).show();
-                $(selectors.addImageHiddenInput).val(imageSrc);
+                $(selectors.addImageSrcHiddenInput).val(imageSrc);
+                $(selectors.addImageIdHiddenInput).val(imageId);
             });
 
             $(selectors.addTextBtn).click(addNewWidgetForText);
@@ -83,11 +87,12 @@
         }
 
         function addNewWidgetForImage() {
-            var imageSrc = $(selectors.addImageHiddenInput).val();
-            addNewWidget(websiteElementType.image, imageSrc);
+            var imageSrc = $(selectors.addImageSrcHiddenInput).val();
+            var imageId = $(selectors.addImageIdHiddenInput).val();
+            addNewWidget(websiteElementType.image, imageSrc, imageId);
         }
 
-        function addNewWidget(websiteElement, imageSrc) {
+        function addNewWidget(websiteElement, imageSrc, imageId) {
             items = getWidgets();
 
             var maxY = getMaxY();
@@ -105,7 +110,8 @@
             var node;
 
             if (websiteElement == websiteElementType.image) {
-                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" style="overflow:hidden;height:auto;width:auto;" /><div class="deleteWidget">&times;</div></div></div>';
+                debugger;
+                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" value="' + imageId + '" style = "overflow:hidden;height:auto;width:auto;" /> <div class="deleteWidget">&times;</div></div ></div > ';
                 node = {
                     x: 0,
                     y: maxY,
@@ -217,6 +223,8 @@
                 el = $(el);
                 var textareaValue = el.find('textarea').val();
                 var imageSrc = el.find('img').attr("src");
+                var imageId = el.find('img').attr("value");
+                debugger;
                 var elementId = el.find('input[type="hidden"]').val();
                 var node = el.data('_gridstack_node');
 
@@ -228,6 +236,7 @@
                     width: node.width,
                     height: node.height,
                     text: textareaValue,
+                    imageId: imageId,
                     imageSrc: imageSrc,
                     id: elementId,
                     websiteElementType: type
@@ -359,12 +368,13 @@
                         <div class="panel-body" id="imageContainer">
                             <div>
                                 <label id="select-image-label">Wybierz zdjęcie</label>
-                                <input type="hidden" id="add-image-hidden-input" value="" />
+                                <input type="hidden" id="add-image-src-hidden-input" value="" />
+                                <input type="hidden" id="add-image-id-hidden-input" value="" />
                                 <input type="button" class="btn btn-danger" style="display:none;" id="add-image-btn" value="Dodaj zdjęcie" />
                             </div>
                             @foreach (var image in Model.Images)
                             {
-                                <img src="@Url.Content(image.FilePath)" height="100" width="100" />
+                                <img src="@Url.Content(image.ImagePath)" height="100" width="100" value="@image.ImageId" />
                             }
                         </div>
                     </div>

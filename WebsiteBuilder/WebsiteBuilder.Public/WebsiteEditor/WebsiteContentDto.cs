@@ -12,6 +12,7 @@ namespace WebsiteBuilder.Public.WebsiteEditor
         public int? Id { get; set; }
         public WebsiteElementType  WebsiteElementType { get; set; }
         public string ImageSrc { get; set; }
+        public int ImageId { get; set; }
         public string Text { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
