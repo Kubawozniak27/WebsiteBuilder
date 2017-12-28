@@ -34,3 +34,6 @@ D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\Webs
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.dll
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.pdb
 D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\obj\Debug\WebsiteBuilder.Data.csprojResolveAssemblyReference.cache
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\WebsiteBuilder.Public.dll
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\WebsiteBuilder.Public.pdb
+D:\repozytorium\WebsiteBuilder\WebsiteBuilder\WebsiteBuilder.Data\bin\Debug\WebsiteBuilder.Public.dll.config

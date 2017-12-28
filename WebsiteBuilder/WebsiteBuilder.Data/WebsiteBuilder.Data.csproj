@@ -75,5 +75,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebsiteBuilder.Public\WebsiteBuilder.Public.csproj">
+      <Project>{01E97EC7-31B1-4BCB-8B0A-EA7E9336C30E}</Project>
+      <Name>WebsiteBuilder.Public</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

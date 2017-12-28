@@ -20,12 +20,17 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                 .Single(x => x.Id == request.WebsiteId);
 
             website.Color = request.WebsiteColor;
+            var addWebsiteContent = new List<WebsiteContentDto>();
+            var updateWebsiteContent = new List<WebsiteContentDto>();
 
-            var addWebsiteContent = request.WebsiteContents.Where(x => x.Id == null).ToList();
-            var updateWebsiteContent = request.WebsiteContents.Where(x => x.Id != null).ToList();
+            if (request.WebsiteContents != null)
+            {
+                addWebsiteContent = request.WebsiteContents.Where(x => x.Id == null).ToList();
+                updateWebsiteContent = request.WebsiteContents.Where(x => x.Id != null).ToList();
+            }
 
 
-            if(request.WidgetsToRemove != null)
+            if (request.WidgetsToRemove != null)
             {
                 foreach (var item in request.WidgetsToRemove)
                 {
@@ -63,6 +68,11 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                         tmp.CoordinateX = item.X;
                         tmp.CoordinateY = item.Y;
                         tmp.Text = item.Text;
+                        tmp.FontSize = item.FontSize;
+                        tmp.FontStyle = item.FontStyle;
+                        tmp.FontWeight = item.FontWeight;
+                        tmp.FontFamily = item.FontFamily;
+                        tmp.FontColor = item.FontColor;
                     }
 
                 }
@@ -82,7 +92,13 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                             CoordinateY = content.Y,
                             Height = content.Height,
                             Width = content.Width,
-                            Text = content.Text
+                            Text = content.Text,
+                            SelectorId = content.SelectorId,
+                            FontSize = content.FontSize,
+                            FontFamily = content.FontFamily,
+                            FontWeight = content.FontWeight,
+                            FontStyle = content.FontStyle,
+                            FontColor = content.FontColor
                         };
                         Db.WebsiteTexts.Add(textEnitity);
                     }
@@ -94,7 +110,9 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                             CoordinateY = content.Y,
                             Height = content.Height,
                             Width = content.Width,
-                            ImageId = content.ImageId
+                            ImageId = content.ImageId,
+                            SelectorId = content.SelectorId,
+                            
                         };
                         Db.WebsiteImages.Add(imageEnitity);
                     }

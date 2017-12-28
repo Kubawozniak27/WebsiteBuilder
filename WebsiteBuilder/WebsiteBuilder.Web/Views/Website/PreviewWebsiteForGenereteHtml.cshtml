@@ -56,14 +56,21 @@
                             }
                             <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" />
                         </div>
-                    }
-                    else
-                    {
-                        <div class="@colWidth" style="@height">
-                            @item.Text
-                        </div>
-                    }
-                }
+                                }
+                                else
+                                {
+
+                                    var fontSize = item.FontSize + "px";
+                                    var fontFamily = item.FontFamily == 0 ? "Arial" : item.FontFamily.ToString();
+                                    var fontWeight = item.FontWeight;
+                                    var fontStyle = item.FontWeight;
+                                    var fontColor = item.FontColor;
+                                    var textStyles = ";font-size:" + fontSize + ";font-family:" + fontFamily + ";font-weight:" + fontWeight + ";font-style:" + fontStyle + ";color:" + fontColor;
+                                    <div class="@colWidth " style="@height @textStyles">
+                                        @item.Text
+                                    </div>
+                                    }
+                                }
             </div>
         }
 

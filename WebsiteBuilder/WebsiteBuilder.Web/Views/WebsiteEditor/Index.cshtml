@@ -41,7 +41,20 @@
             selectImageLabel: '#select-image-label',
             addTextBtn: '#add-text-btn',
             websiteIdHidden: '#WebsiteId',
-            deleteWidget: '.deleteWidget'
+            deleteWidget: '.deleteWidget',
+            imageId: '.imageId',
+            textId: '.textId',
+            textIdError: '#textIdError',
+            imageIdError: '#imageIdError',
+            selectImage: '#imageContainer img',
+            addNavigationBar: '#add-navigation-bar',
+            navigationBar: '#navigation-bar',
+            editTextarea: '.editWidget',
+            selectFontSize: '#selectFontSize',
+            selectFontWeight: '#selectFontWeight',
+            selectFontStyle: '#selectFontStyle',
+            selectFontFamily: '#selectFontFamily',
+            changeFontColorBtn: '#changeFontColorBtn'
         }
 
         var websiteElementType = {
@@ -49,50 +62,145 @@
             image: 2
         }
 
+        var fontWeightType = {
+            normal: 1,
+            bold: 2
+        }
+
+        var fontStyleType = {
+            normal: 1,
+            italic: 2
+        }
+
+        var fontFamilyType = {
+            "Arial": 1,
+            "'Century Gothic'": 2,
+            "'Copperplate Gothic Light'": 3,
+            "Georgia": 4,
+            "Impact": 5,
+            "'Lucida Console'": 6,
+            "'Tahoma'": 7,
+            "'Times New Roman'": 8,
+            "'Trebuchet MS'": 9,
+            "'Verdana'": 10
+        };
+
+
+
         var grid;
         var items;
         var itemsToDelelete = [];
+        var selectedTextAreaForEdit = null;
+        var selectorWidgetId = [];
 
         $(function () {
             init();
         });
-
-
 
         function init() {
             initColorPicker();
             initGridStack();
             $(selectors.saveBtn).click(saveWebsite);
 
-
-            $("#imageContainer img").click(function () {
-                var imageSrc = $(this).attr('src');
-                var imageId = $(this).attr('value');
-                debugger;
-                $(selectors.selectImageLabel).hide();
-                $(selectors.addImageBtn).show();
-                $(selectors.addImageSrcHiddenInput).val(imageSrc);
-                $(selectors.addImageIdHiddenInput).val(imageId);
-            });
-
             $(selectors.addTextBtn).click(addNewWidgetForText);
 
             $(selectors.addImageBtn).click(addNewWidgetForImage);
 
+            $(selectors.addNavigationBar).click(function () {
+
+            });
+
+            $(selectors.selectImage).click(function () {
+                selectImage(this);
+            });
+
+            $(selectors.selectFontSize).change(function () {
+                selectFontSize(this);
+            });
+
+
+            $(selectors.selectFontFamily).change(function () {
+                selectFontFamily(this);
+            });
+
+            $(selectors.selectFontStyle).change(function () {
+                selectFontStyle(this);
+            });
+
+            $(selectors.selectFontWeight).change(function () {
+                selectFontWeight(this);
+            });
 
         }
 
+        function selectFontFamily(context) {
+            var changeValue = parseInt($(context).val());
+            var textArea = $("#" + selectedTextAreaForEdit);
+            var fontFamilyValue = stringOfFontFamilyType(changeValue);
+            $(textArea).css({ "font-family": fontFamilyValue });
+        }
+        function selectFontSize(context) {
+            var changeValue = $(context).val();
+            var textArea = $("#" + selectedTextAreaForEdit);
+            $(textArea).css('font-size', changeValue + "px");
+        }
+        function selectFontStyle(context) {
+            var changeValue = parseInt($(context).val());
+            var textArea = $("#" + selectedTextAreaForEdit);
+            var fontWeightValue = stringOfFontStyleType(changeValue);
+            $(textArea).css("font-style", fontWeightValue);
+        }
+        function selectFontWeight(context) {
+            var changeValue = parseInt($(context).val());
+            var textArea = $("#" + selectedTextAreaForEdit);
+            var fontWeightValue = stringOfFontWeightType(changeValue);
+            $(textArea).css("font-weight", fontWeightValue);
+        }
+        function selectImage(image) {
+            var imageSrc = $(image).attr('src');
+            var imageId = $(image).attr('value');
+            $(selectors.selectImageLabel).hide();
+            $(selectors.addImageBtn).show();
+            $(selectors.imageId).show();
+            $(selectors.addImageSrcHiddenInput).val(imageSrc);
+            $(selectors.addImageIdHiddenInput).val(imageId);
+        }
         function addNewWidgetForText() {
-            addNewWidget(websiteElementType.text);
-        }
+            var textSelectorId = $(selectors.textId).val();
+            var isSelectorUnique = checkUniqueWidgetId(textSelectorId);
 
+            if (isSelectorUnique == false) {
+                $(selectors.textIdError).text("Sekcja musi być unikalna");
+                return;
+            }
+
+            $(selectors.textIdError).empty();
+
+            addNewWidget(websiteElementType.text, null, null, textSelectorId);
+        }
         function addNewWidgetForImage() {
             var imageSrc = $(selectors.addImageSrcHiddenInput).val();
             var imageId = $(selectors.addImageIdHiddenInput).val();
-            addNewWidget(websiteElementType.image, imageSrc, imageId);
-        }
+            var imageSelectorId = $(selectors.imageId).val();
 
-        function addNewWidget(websiteElement, imageSrc, imageId) {
+            var isSelectorUnique = checkUniqueWidgetId(imageSelectorId);
+
+            if (isSelectorUnique == false) {
+                $(selectors.imageIdError).text("Sekcja musi być unikalna");
+                return;
+            }
+            $(selectors.imageIdError).empty();
+
+
+
+            addNewWidget(websiteElementType.image, imageSrc, imageId, imageSelectorId);
+        }
+        function checkUniqueWidgetId(element) {
+            return !(selectorWidgetId.indexOf(element) > -1);
+        }
+        function addNewWidget(websiteElement, imageSrc, imageId, selectorId) {
+
+            selectorWidgetId.push(selectorId);
             items = getWidgets();
 
             var maxY = getMaxY();
@@ -111,7 +219,7 @@
 
             if (websiteElement == websiteElementType.image) {
                 debugger;
-                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" value="' + imageId + '" style = "overflow:hidden;height:auto;width:auto;" /> <div class="deleteWidget">&times;</div></div ></div > ';
+                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" value="' + imageId + '" id="' + selectorId + '" style = "overflow:hidden;height:auto;width:auto;" /> <div class="deleteWidget">&times;</div></div ></div > ';
                 node = {
                     x: 0,
                     y: maxY,
@@ -120,7 +228,7 @@
                 };
             }
             else if (websiteElement == websiteElementType.text) {
-                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;"></textarea><div class="deleteWidget">&times;</div></div></div>';
+                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;" id="' + selectorId + '" ></textarea><span class="editWidget"><i class="fa fa-pencil" aria-hidden="true"></i></span><div class="deleteWidget">&times;</div></div></div>';
                 node = {
                     x: 0,
                     y: maxY,
@@ -131,10 +239,10 @@
 
             grid.addWidget($(widgetDefinition), node.x, node.y, node.width, node.height);
 
+            initActionWidget();
+
             return false;
         }
-
-
         function initGridStack() {
             var websiteId = $(selectors.websiteIdHidden).val();
 
@@ -145,68 +253,121 @@
                 $(selectors.grid).gridstack(options);
                 $(selectors.grid).each(function () {
                     grid = $(this).data('gridstack');
-
                     _.each(items.WebsiteContents, function (node) {
+                        selectorWidgetId.push(node.SelectorId);
+
+                        var fontSize = node.FontSize;
+                        var fontWeight = stringOfFontWeightType(node.FontWeight);
+                        var fontFamily = stringOfFontFamilyType(node.FontFamily);
+                        var fontStyle = stringOfFontStyleType(node.FontStyle);
+                        var fontColor = node.FontColor;
+
+                        var styleForFont = 'font-weight:' + fontWeight + ';font-style:' + fontStyle + ';font-family:' + fontFamily + ';font-size:' + fontSize + 'px;' + 'color:' + fontColor + ';';
+                        debugger;
+
                         if (node.WebsiteElementType == websiteElementType.image) {
                             node.ImageSrc = node.ImageSrc.replace("~", "");
-                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><img src="' + node.ImageSrc + '" style="overflow:hidden;height:auto;width:auto;" /><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
+                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><img src="' + node.ImageSrc + '" style="overflow:hidden;height:auto;width:auto;" id="' + node.SelectorId + '"  /><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
                                 node.X, node.Y, node.Width, node.Height)
                         }
                         else if (node.WebsiteElementType == websiteElementType.text) {
-                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;">' + node.Text + '</textarea><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
+                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;' + styleForFont + '" id="' + node.SelectorId + '" >' + node.Text + '</textarea><span class="editWidget"><i class="fa fa-pencil" aria-hidden="true"></i></span><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
                                 node.X, node.Y, node.Width, node.Height)
                         }
 
                     }, this);
-                    $(selectors.deleteWidget).click(function () {
-                        var widgetId;
-                        var context = this;
-                        var widgetTypeTmp = $(this).prev();
-                        debugger;
-                        var widgetType = $(widgetTypeTmp).prop('tagName') == "IMG" ? websiteElementType.image : websiteElementType.text;
-                        debugger;
-                        var item = $(this).parent().parent();
-                        var id = $(this).next().val();
-                        var coordinateX = item.data('gs-x');
-                        var coordinateY = item.data('gs-y');
-                        var height = item.data('gs-height');
-                        var width = item.data('gs-width');
 
-                        if (id) {
-                            var websiteToDelete = {};
-                            websiteToDelete.Id = id;
-                            websiteToDelete.WebsiteElementType = widgetType;
-                            itemsToDelelete.push(websiteToDelete);
-                        }
-                        getWidgetsAsync();
-                        getWidgetIdFromArrayAndDelete(context);
-
-                        function getWidgetsAsync() {
-                            setTimeout(function () {
-                                items = getWidgets();
-                            }, 100);
-                        }
-                        function getWidgetIdFromArrayAndDelete(context) {
-                            setTimeout(function () {
-                                widgetId = getWidgetIdFromArray(coordinateX, coordinateY);
-                                deleteWidget(widgetId, context);
-                            }, 200);
-                        }
-                        function deleteWidget(widgetId, ciaobella) {
-                            setTimeout(function () {
-                                if (widgetId > -1) {
-                                    items.splice(widgetId, 1);
-                                    let deleteWidget = $(context).closest(".grid-stack-item");
-                                    grid.removeWidget(deleteWidget);
-                                }
-                            }, 250);
-                        }
-                    });
                     return false;
                 });
+                initActionWidget();
             })
         }
+        function initActionWidget() {
+            initDeleteWidget();
+            initEditTextArea();
+            initColorPickerForFontColor();
+        }
+        function initDeleteWidget() {
+            $(selectors.deleteWidget).click(function () {
+                var widgetId;
+                var context = this;
+                var widgetTypeTmp = $(this).prev();
+                var widgetType = $(widgetTypeTmp).prop('tagName') == "IMG" ? websiteElementType.image : websiteElementType.text;
+                var item = $(this).parent().parent();
+                var id = $(this).next().val();
+                var coordinateX = item.data('gs-x');
+                var coordinateY = item.data('gs-y');
+                var height = item.data('gs-height');
+                var width = item.data('gs-width');
 
+                if (id) {
+                    var websiteToDelete = {};
+                    websiteToDelete.Id = id;
+                    websiteToDelete.WebsiteElementType = widgetType;
+                    itemsToDelelete.push(websiteToDelete);
+                }
+                getWidgetsAsync();
+                getWidgetIdFromArrayAndDelete(context);
+
+                function getWidgetsAsync() {
+                    setTimeout(function () {
+                        items = getWidgets();
+                    }, 100);
+                }
+                function getWidgetIdFromArrayAndDelete(context) {
+                    setTimeout(function () {
+                        widgetId = getWidgetIdFromArray(coordinateX, coordinateY);
+                        deleteWidget(widgetId, context);
+                    }, 200);
+                }
+                function deleteWidget(widgetId, ciaobella) {
+                    setTimeout(function () {
+                        if (widgetId > -1) {
+                            items.splice(widgetId, 1);
+                            let deleteWidget = $(context).closest(".grid-stack-item");
+                            grid.removeWidget(deleteWidget);
+                        }
+                    }, 250);
+                }
+            });
+        }
+        function initEditTextArea() {
+            $(selectors.editTextarea).click(function () {
+                if (selectedTextAreaForEdit != null) {
+                    $("#" + selectedTextAreaForEdit).closest('.grid-stack-item-content').css('border', '3px dashed black');
+                }
+
+                var textArea = $(this).siblings('textarea');
+                textArea.closest('.grid-stack-item-content').css('border', '3px dashed red');
+                var textareaId = textArea.attr('id');
+                var textColor = textArea.css('color');
+                var textFontSize = textArea.css('font-size');
+                var textFontFamily = textArea.css('font-family');
+                var textFontWeight = textArea.css('font-weight');
+                var textFontStyle = textArea.css('font-style');
+
+                textFontSize = parseInt(textFontSize.replace("px", ""));
+                textFontStyle = textFontStyle === "normal" ? fontStyleType.normal : fontStyleType.italic;
+                textFontWeight = textFontWeight === 400 ? fontWeightType.normal : fontWeightType.bold;
+                textFontFamily = fontFamilyType[textFontFamily] == null ? fontFamilyType.Arial : fontFamilyType[textFontFamily];
+                textColor = convertRGBtoHex(textColor);
+
+                $(selectors.selectFontFamily).val(textFontFamily);
+                $(selectors.selectFontSize).val(textFontSize);
+                $(selectors.selectFontWeight).val(textFontWeight);
+                $(selectors.selectFontStyle).val(textFontStyle);
+
+                $(selectors.changeFontColorBtn).find('input[type="text"]').val(textColor);
+                selectedTextAreaForEdit = textareaId;
+            });
+        }
+        function convertRGBtoHex(rgb) {
+            rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+            return (rgb && rgb.length === 4) ? "#" +
+                ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+        }
         function getWidgetIdFromArray(coordinateX, coordinateY) {
             var result;
             items.filter(function (e, index) {
@@ -217,18 +378,51 @@
             });
             return result;
         }
-
         function getWidgets() {
             return _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
                 el = $(el);
-                var textareaValue = el.find('textarea').val();
-                var imageSrc = el.find('img').attr("src");
-                var imageId = el.find('img').attr("value");
-                debugger;
+                var textareaValue = null;
+                var imageSrc = imageSrc = el.find('img').attr("src");
+                var imageId = null;
                 var elementId = el.find('input[type="hidden"]').val();
                 var node = el.data('_gridstack_node');
+                var selectorId = null;
+
+
+                var fontSizeText = null;
+                var fontWeightText = null;
+                var fontColorText = null;
+                var fontStyleText = null;
+                var fontFamilyText = null;
+                var fontColorText = null;
 
                 var type = imageSrc != null ? websiteElementType.image : websiteElementType.text;
+
+                if (type == websiteElementType.text) {
+                    var fontSizeTextTmp = el.find('textarea').css('fontSize');
+                    textareaValue = el.find('textarea').val();
+                    selectorId = el.find('textarea').attr('id');
+
+                    fontSizeText = parseInt(fontSizeTextTmp.replace("px", ""));
+
+
+                    fontStyleText = el.find('textarea').css('font-style');
+                    fontStyleText = fontStyleText === "normal" ? fontStyleType.normal : fontStyleType.italic;
+
+                    fontWeightText = el.find('textarea').css('font-weight');
+                    fontWeightText = fontWeightText === 400 ? fontWeightType.normal : fontWeightType.bold;
+
+                    fontFamilyText = el.find('textarea').css('font-family');
+                    fontFamilyText = fontFamilyType[fontFamilyText];
+
+                    fontColorText = convertRGBtoHex(el.find('textarea').css('color'));
+                    debugger;
+                }
+                else {
+                    selectorId = el.find('img').attr('id');
+
+                    imageId = el.find('img').attr("value");
+                }
 
                 return {
                     x: node.x,
@@ -239,18 +433,34 @@
                     imageId: imageId,
                     imageSrc: imageSrc,
                     id: elementId,
-                    websiteElementType: type
+                    selectorId: selectorId,
+                    websiteElementType: type,
+                    fontSize: fontSizeText,
+                    fontStyle: fontStyleText,
+                    fontWeight: fontWeightText,
+                    fontFamily: fontFamilyText,
+                    fontColor: fontColorText
                 }
             }, this);
         }
-
         function getMaxY() {
             if (items.length != 0) {
                 return items.reduce((max, p) => p.y > max ? p.y : max, items[0].y);
             }
             return null;
         }
-
+        function stringOfFontFamilyType(value) {
+            for (var k in fontFamilyType) if (fontFamilyType[k] == value) return k;
+            return null;
+        }
+        function stringOfFontStyleType(value) {
+            for (var k in fontStyleType) if (fontStyleType[k] == value) return k;
+            return null;
+        }
+        function stringOfFontWeightType(value) {
+            for (var k in fontWeightType) if (fontWeightType[k] == value) return k;
+            return null;
+        }
         function saveWebsite() {
             var websiteColor = $(selectors.backgroundColorHidden).val();
             var websiteId = $(selectors.websiteIdHidden).val();
@@ -268,6 +478,25 @@
 
         }
 
+        function initColorPickerForFontColor() {
+            $(selectors.changeFontColorBtn).colorpicker({
+                color: 'Zmien kolor tła',
+                colorSelectors: {
+                    'red': '#FF0000',
+                    'orange': '#FFA500',
+                    'yellow': '#ffff00',
+                    'limegreen': '#32cd32',
+                    'green': '#00ff00',
+                    'blue': '#0000ff '
+                }
+            }
+            ).on('changeColor', function (e) {
+                var colorHex = e.color.toString('hex');
+                var textArea = $("#" + selectedTextAreaForEdit);
+                $(textArea).css('color', colorHex);
+            });
+        }
+
         function initColorPicker() {
             $(selectors.backgroundColorBtn).colorpicker(
                 {
@@ -282,7 +511,8 @@
                     }
                 }
             ).on('changeColor', function (e) {
-                $(selectors.backgroundColorBtn).val(e.color.toString('hex'));
+                
+                $(selectors.backgroundColorBtn).val();
                 $(selectors.backgroundColorHidden).val(e.color.toString('hex'));
                 $(selectors.websiteContainer).css("background-color", e.color.toString('hex'));
             });
@@ -320,26 +550,23 @@
                                 Import zdjęcia
                             </h3>
                         </div>
-                        <div class="panel-body" style="text-align:center;">
+                        <div class="panel-body" style="text-align:center; padding-top:0;">
                             @using (Html.BeginForm("UploadImage", "WebsiteEditor", FormMethod.Post, new { enctype = "multipart/form-data" }))
                             {
-                                <input type="hidden" name="WebsiteId" value="@Model.WebsiteId" />
-                                <div class="form-group">
-                                    <input type="text" class="col-lg-12 form-control" style="color:black;" name="Title" placeholder="Tytuł..." />
-                                </div>
-                                <div class="form-group" style="margin-top:10px;">
-                                    <label for="file-upload" class="custom-file-upload col-lg-12">
-                                        <i class="fa fa-cloud-upload"></i> Wybierz plik
-                                    </label>
-                                    <input id="file-upload" type="file" name="ImageFile" />
-                                </div>
+                            <input type="hidden" name="WebsiteId" value="@Model.WebsiteId" />
+                            <div class="form-group">
+                                <label for="file-upload" class="custom-file-upload col-lg-12">
+                                    <i class="fa fa-cloud-upload"></i> Wybierz plik
+                                </label>
+                                <input id="file-upload" type="file" name="ImageFile" />
+                            </div>
+                            <div>
                                 <div>
                                     <div>
-                                        <div>
-                                            <input type="submit" value="Zapisz" class="btn btn-danger" />
-                                        </div>
+                                        <input type="submit" value="Zapisz" class="btn btn-danger" />
                                     </div>
                                 </div>
+                            </div>
                             }
                         </div>
                     </div>
@@ -353,13 +580,15 @@
                             <div>
                                 <div>
                                     <div>
+                                        <input type="text" class="textId form-control" placeholder="Nazwa sekcji np. kontakt" style="margin-bottom:15px; color:black;" />
+                                        <label class="error" id="textIdError" style="margin-bottom:15px;"></label>
                                         <input type="button" class="btn btn-danger" id="add-text-btn" value="Dodaj tekst" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default" style="margin-top:20px;">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 Zdjęcia
@@ -367,15 +596,33 @@
                         </div>
                         <div class="panel-body" id="imageContainer">
                             <div>
-                                <label id="select-image-label">Wybierz zdjęcie</label>
+                                <label id="select-image-label" style="color:black;">Wybierz zdjęcie</label>
                                 <input type="hidden" id="add-image-src-hidden-input" value="" />
                                 <input type="hidden" id="add-image-id-hidden-input" value="" />
+                                <input type="text" class="imageId form-control" placeholder="Nazwa sekcji np. obrazek1" style="display:none;color:black;" />
+                                <label class="error" id="imageIdError" style="margin-bottom:15px;"></label>
                                 <input type="button" class="btn btn-danger" style="display:none;" id="add-image-btn" value="Dodaj zdjęcie" />
                             </div>
                             @foreach (var image in Model.Images)
                             {
-                                <img src="@Url.Content(image.ImagePath)" height="100" width="100" value="@image.ImageId" />
+                            <img src="@Url.Content(image.ImagePath)" height="100" width="100" value="@image.ImageId" />
                             }
+                        </div>
+                    </div>
+                    <div class="panel panel-default" style="margin-top:20px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Menu
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <div>
+                                    <div>
+                                        <input type="button" class="btn btn-danger" id="add-navigation-bar" value="Dodaj menu" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -385,7 +632,76 @@
         <div class="main_column">
             <div class="website_container" id="website_container" style="background-color:@Model.WebsiteColor !important;">
                 <div class="container-fluid">
+                    <div id="navigation-bar" style="display:none;">
+                        <ul>
+                            <li>
+
+                            </li>
+                        </ul>
+                    </div>
                     <div class="grid-stack" id="grid">
+                    </div>
+                </div>
+            </div>
+            <div class="editWidgetDiv">
+                <div class="container-fluid" style="color:black;">
+                    <h3>
+                        Edytuj
+                    </h3>
+                    <div class="row">
+                        <label>Wybierz rodzaj</label>
+                        <select id="selectFontFamily">
+                            <option value="1" style="font-family:Arial;">Arial</option>
+                            <option value="2" style="font-family:'Century Gothic';">Century Gothic</option>
+                            <option value="3" style="font-family:'Copperplate Gothic Light';">Copperplate Gothic Light</option>
+                            <option value="4" style="font-family:Georgia;">Georgia</option>
+                            <option value="5" style="font-family:Impact;">Impact</option>
+                            <option value="6" style="font-family:'Lucida Console';">Lucida Console</option>
+                            <option value="7" style="font-family:Tahoma;">Tahoma</option>
+                            <option value="8" style="font-family:'Times New Roman';">Times New Roman</option>
+                            <option value="9" style="font-family:'Trebuchet MS';">Trebuchet MS</option>
+                            <option value="10" style="font-family:Verdana">Verdana</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Wybierz rozmiar</label>
+                        <select id="selectFontSize">
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="14">14</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="20">20</option>
+                            <option value="22">22</option>
+                            <option value="24">24</option>
+                            <option value="26">26</option>
+                            <option value="28">28</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Wybierz styl czcionki</label>
+                        <select id="selectFontStyle">
+                            <option value="1">Normalna</option>
+                            <option value="2">Pochylona</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Wybierz grubość czcionki</label>
+                        <select id="selectFontWeight">
+                            <option value="1" style="font-weight:normal;">Normalna</option>
+                            <option value="2" style="font-weight:bold;">Pogrubiona</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Wybierz kolor czcionki</label>
+                        <div id="changeFontColorBtn" class="input-group colorpicker-component">
+                            <input type="text" value=""/>
+                            <span class="input-group-addon"><i></i></span>
+                        </div>
                     </div>
                 </div>
             </div>

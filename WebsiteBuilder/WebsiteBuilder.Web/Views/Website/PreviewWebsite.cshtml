@@ -3,7 +3,7 @@
 @{
     Layout = null;
 
-    var groupWebsiteContent = Model.WebsiteContents.OrderBy(x=>x.Y).GroupBy(x => x.Y).Select(y => new
+    var groupWebsiteContent = Model.WebsiteContents.OrderBy(x => x.Y).GroupBy(x => x.Y).Select(y => new
     {
         Y = y.Key,
         Properties = y.ToList()
@@ -46,7 +46,7 @@
                     int tmpHeightForText = item.Height * 20;
                     string height = String.Format("min-height: {0}px;", tmpHeightForText);
 
-                    string tmpHeightForImage = item.Height * 70+"px;";
+                    string tmpHeightForImage = item.Height * 70 + "px;";
                     if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
                     {
 
@@ -56,7 +56,14 @@
                     }
                     else
                     {
-                        <div class="@colWidth" style="@height">
+
+                        var fontSize = item.FontSize + "px";
+                        var fontFamily = item.FontFamily == 0 ? "Arial" : item.FontFamily.ToString();
+                        var fontWeight = item.FontWeight;
+                        var fontStyle = item.FontWeight;
+                        var fontColor = item.FontColor;
+                        var textStyles = ";font-size:" + fontSize + ";font-family:" + fontFamily + ";font-weight:" + fontWeight + ";font-style:" + fontStyle + ";color:" + fontColor;
+                        <div class="@colWidth " style="@height @textStyles">
                             @item.Text
                         </div>
                     }

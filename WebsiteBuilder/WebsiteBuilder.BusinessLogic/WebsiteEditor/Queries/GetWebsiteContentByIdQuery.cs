@@ -29,13 +29,18 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                 Y = x.CoordinateY,
                 Height = x.Height,
                 Width = x.Width,
-                WebsiteElementType = WebsiteElementType.Text
+                SelectorId = x.SelectorId,
+                WebsiteElementType = WebsiteElementType.Text,
+                FontSize = x.FontSize,
+                FontFamily = x.FontFamily,
+                FontStyle = x.FontStyle,
+                FontWeight = x.FontWeight,
+                FontColor = x.FontColor
             });
 
             var websiteImages = Db.Images
                 .Include(x => x.WebsiteImages)
                 .Where(x => x.WebsiteId == request).ToList();
-
 
             var images = new List<WebsiteContentDto>();
 
@@ -51,14 +56,12 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                         WebsiteElementType = WebsiteElementType.Image,
                         Height = websiteImage.Height,
                         Width = websiteImage.Width,
+                        SelectorId = websiteImage.SelectorId,
                         X = websiteImage.CoordinateX,
                         Y = websiteImage.CoordinateY
                     });
                 }
             }
-
-
-            
 
             var websiteContents = new List<WebsiteContentDto>();
 
