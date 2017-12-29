@@ -2,6 +2,7 @@
 
 @{
     Layout = null;
+    var navbarColor = Model.NavigationBars != null ? Model.NavigationBars.First().NavigationBarStyle : "";
 
     var groupWebsiteContent = Model.WebsiteContents.OrderBy(x => x.Y).GroupBy(x => x.Y).Select(y => new
     {
@@ -17,9 +18,25 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/Common.css" />
 </head>
 <body style="background-color:@Model.WebsiteColor">
-    <div style="padding:40px;">
+    <div>
+        <nav class="navbar @navbarColor" style="border-radius:0;">
+            <ul class="nav navbar-nav">
+                @foreach (var item in Model.NavigationBars)
+                {
+                    var hrefTmp = "#" + item.SectionName;
+                    <li id="15">
+                        <a href="@hrefTmp">
+                            <span class="tab">@item.NavigationName</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <div class="container-fluid" style="padding:40px;">
         @foreach (var i in groupWebsiteContent)
         {
             var first = 0;
@@ -49,28 +66,26 @@
                     string tmpHeightForImage = item.Height * 70 + "px;";
                     if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
                     {
-
+                        var imageSrc = item.ImageSrc.Replace("~/Images", "Images");
                         <div class="@colWidth" style="@height ;display:flex;">
-                            @{ 
-                                var imageSrc = item.ImageSrc.Replace("~/Images","Images");
-                            }
-                            <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" />
+                            
+                            <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" id="@item.SelectorId" />
                         </div>
-                                }
-                                else
-                                {
+                    }
+                    else
+                    {
 
-                                    var fontSize = item.FontSize + "px";
-                                    var fontFamily = item.FontFamily == 0 ? "Arial" : item.FontFamily.ToString();
-                                    var fontWeight = item.FontWeight;
-                                    var fontStyle = item.FontWeight;
-                                    var fontColor = item.FontColor;
-                                    var textStyles = ";font-size:" + fontSize + ";font-family:" + fontFamily + ";font-weight:" + fontWeight + ";font-style:" + fontStyle + ";color:" + fontColor;
-                                    <div class="@colWidth " style="@height @textStyles">
-                                        @item.Text
-                                    </div>
-                                    }
-                                }
+                        var fontSize = item.FontSize + "px";
+                        var fontFamily = item.FontFamily == 0 ? "Arial" : item.FontFamily.ToString();
+                        var fontWeight = item.FontWeight;
+                        var fontStyle = item.FontWeight;
+                        var fontColor = item.FontColor;
+                        var textStyles = ";font-size:" + fontSize + ";font-family:" + fontFamily + ";font-weight:" + fontWeight + ";font-style:" + fontStyle + ";color:" + fontColor;
+                        <div class="@colWidth " style="@height @textStyles" id="@item.SelectorId">
+                            @item.Text
+                        </div>
+                    }
+                }
             </div>
         }
 

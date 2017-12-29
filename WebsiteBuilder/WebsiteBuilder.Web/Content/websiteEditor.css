@@ -169,4 +169,74 @@ input[type="file"] {
     right:20px;
     top:100px;
     position:fixed;
+
+}
+
+.addNavigationElement {
+    height: 200px;
+    width: 500px;
+    position: relative;
+    top: 100px;
+    left: 200px;
+    background-color: deepskyblue;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.deleteNavbar {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background-color: #FFF;
+    padding: 5px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: .2;
+    text-align: center;
+    font-size: 22px;
+    line-height: 10px;
+    border-radius: 50%;
+}
+    .deleteNavbar:hover {
+        opacity: 1;
+    }
+
+
+#dropdownForNavbarStyles option:hover {
+    background: transparent;
+}
+.errorForUploadImage, .errorForAddTextOrImage, .errorForAddTextOrImageRequired {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 100px;
+    width: 300px;
+}
+
+.deleteMessege {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background-color: #FFF;
+    padding: 5px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: .2;
+    text-align: center;
+    font-size: 22px;
+    line-height: 10px;
+    border-radius: 50%;
+}
+    .deleteMessege:hover {
+        opacity: 1;
+    }
+
+.selectStyleColor {
+    height: 27px;
+    width: 150px;
+    border: 1px solid black;
 }

@@ -62,6 +62,7 @@ namespace WebsiteBuilder.Web.Controllers
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             string responseWebsite;
             string responseBoostrapStyles;
+            string responseCommonCss;
             var encoding = ASCIIEncoding.UTF8;
 
             using (var reader = new StreamReader(response.GetResponseStream(), encoding))
@@ -74,9 +75,14 @@ namespace WebsiteBuilder.Web.Controllers
                 responseBoostrapStyles = streamReader.ReadToEnd();
             }
 
+            using (var streamReader = new StreamReader(Server.MapPath("~/Content/Common.css")))
+            {
+                responseCommonCss = streamReader.ReadToEnd();
+            }
+
             var bytesForWebsite = Encoding.UTF8.GetBytes(responseWebsite);
             var bytesForBoostrapStyles = Encoding.ASCII.GetBytes(responseBoostrapStyles);
-
+            var bytesForresponseCommonCss = Encoding.ASCII.GetBytes(responseCommonCss);
             var images = GetQuery<GetImagesByWebsiteIdQuery>().Execute(websiteId);
 
             using (MemoryStream ms = new MemoryStream())
@@ -94,6 +100,13 @@ namespace WebsiteBuilder.Web.Controllers
                     {
                         zipStream.Write(bytesForBoostrapStyles, 0, bytesForBoostrapStyles.Length);
                     }
+
+                    zipArchiveEntry = archive.CreateEntry("css/Common.css", CompressionLevel.Optimal);
+                    using (var zipStream = zipArchiveEntry.Open())
+                    {
+                        zipStream.Write(bytesForresponseCommonCss, 0, bytesForresponseCommonCss.Length);
+                    }
+
 
                     foreach (var item in images)
                     {

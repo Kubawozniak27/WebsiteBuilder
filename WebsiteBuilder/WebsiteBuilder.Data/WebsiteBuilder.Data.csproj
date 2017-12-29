@@ -66,6 +66,7 @@
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\WebsiteImage.cs" />
+    <Compile Include="Entities\WebsiteNavigationBar.cs" />
     <Compile Include="Entities\WebsiteText.cs" />
     <Compile Include="Entities\Website.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

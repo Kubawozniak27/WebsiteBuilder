@@ -9,6 +9,7 @@ using WebsiteBuilder.Public.WebsiteEditor;
 using System.Data.Entity;
 using WebsiteBuilder.Public.Text;
 using WebsiteBuilder.Public.Website;
+using WebsiteBuilder.Public.NavigationBar;
 
 namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
 {
@@ -63,6 +64,16 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
                 }
             }
 
+            var navigationBars = Db.WebsiteNavigationBar
+                .Where(x => x.WebsiteId == request)
+                .Select(x => new NavigationBarDto()
+                {
+                    NavigationId = x.Id,
+                    SectionName = x.SectionName,
+                    NavigationName = x.NavigationName,
+                    NavigationBarStyle = x.NavigationBarStyle
+                }).ToList();
+
             var websiteContents = new List<WebsiteContentDto>();
 
             websiteContents.AddRange(texts);
@@ -72,7 +83,8 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Queries
             {
                 WebsiteId = website.Id,
                 WebsiteColor = website.Color,
-                WebsiteContents = websiteContents
+                WebsiteContents = websiteContents,
+                NavigationBars = navigationBars
             };
 
 

@@ -8,7 +8,7 @@ using WebsiteBuilder.Core.Service;
 using WebsiteBuilder.Public.Website;
 using WebsiteBuilder.Public.WebsiteEditor;
 using EntityFramework.Extensions;
-
+using WebsiteBuilder.Public.NavigationBar;
 
 namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
 {
@@ -22,6 +22,8 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
             website.Color = request.WebsiteColor;
             var addWebsiteContent = new List<WebsiteContentDto>();
             var updateWebsiteContent = new List<WebsiteContentDto>();
+            var deleteNavigationBars = new List<NavigationBarDto>();
+            deleteNavigationBars = request.IsDeleteNavigationArrayFromServer == true ? request.NavigationBarsToRemove : null;
 
             if (request.WebsiteContents != null)
             {
@@ -121,8 +123,33 @@ namespace WebsiteBuilder.BusinessLogic.WebsiteEditor.Commands
                 Db.SaveChanges();
             }
 
-            
+            if(deleteNavigationBars != null)
+            {
+                foreach (var navigationBar in deleteNavigationBars)
+                {
+                    var entity = Db.WebsiteNavigationBar.First(x => x.Id == navigationBar.NavigationId);
+                    Db.WebsiteNavigationBar.Remove(entity);
+                }
+                Db.SaveChanges();
+            }
 
+            var enitityNavigationBars = new List<Data.Entities.WebsiteNavigationBar>();
+            if (request.NavigationBars != null)
+            {
+                foreach (var navigationBar in request.NavigationBars.Where(x => x.NavigationId == null))
+                {
+                    var entity = new Data.Entities.WebsiteNavigationBar()
+                    {
+                        NavigationName = navigationBar.NavigationName,
+                        SectionName = navigationBar.SectionName,
+                        WebsiteId = request.WebsiteId,
+                        NavigationBarStyle = request.NavigationBarStyle
+                    };
+                    enitityNavigationBars.Add(entity);
+                }
+                Db.WebsiteNavigationBar.AddRange(enitityNavigationBars);
+                Db.SaveChanges();
+            }
 
             return new OperationResult();
         }
