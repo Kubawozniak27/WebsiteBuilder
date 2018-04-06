@@ -3,9 +3,7 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
@@ -19,712 +17,17 @@
     <link href="~/Content/GridStack/gridstack.css" rel="stylesheet" />
     <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
     <script src="~/ScriptsApp/Common/AjaxHelper.js"></script>
-
     <script src="~/Scripts/bootstrap-colorpicker.js"></script>
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/Scripts/GridStack/lodash.min.js"></script>
     <script src="~/Scripts/GridStack/gridstack.js"></script>
     <script src="~/Scripts/GridStack/gridstack.jQueryUI.js"></script>
-    <script src="~/ScriptsApp/WebsiteEditor/Index.js"></script>
-    <script>
-        var selectors = {
-            selectColorDiv: '#selectColorDiv',
-            selectColor: '#selectColor',
-            backgroundColorBtn: '#changeBackgroundColorBtn',
-            websiteContainer: '#website_container',
-            saveBtn: '#save-website-btn',
-            addImageBtn: '#add-image-btn',
-            grid: '#grid',
-            addImageSrcHiddenInput: '#add-image-src-hidden-input',
-            addImageIdHiddenInput: '#add-image-id-hidden-input',
-            selectImageLabel: '#select-image-label',
-            addTextBtn: '#add-text-btn',
-            websiteIdHidden: '#WebsiteId',
-            deleteWidget: '.deleteWidget',
-            imageId: '.imageId',
-            textId: '.textId',
-            textIdError: '#textIdError',
-            imageIdError: '#imageIdError',
-            selectImage: '#imageContainer img',
-            addNavigationBar: '#add-navigation-bar',
-            navigationBar: '#navigation-bar',
-            editTextarea: '.editWidget',
-            selectFontSize: '#selectFontSize',
-            selectFontWeight: '#selectFontWeight',
-            selectFontStyle: '#selectFontStyle',
-            selectFontFamily: '#selectFontFamily',
-            changeFontColorBtn: '#changeFontColorBtn',
-            addNavbarElementBtn: '#addNavbarElementBtn',
-            nameNavigation: '.nameNavigation',
-            selectSections: '#selectSections',
-            addNavigationListItem: '.addNavigationListItem',
-            addNavigationElement: '.addNavigationElement',
-            deleteNavbar: '.deleteNavbar',
-            radiobuttonForNavbarStyles: '.radio',
-            errorForImageLabel: '#errorForImage',
-            uploadImageBtn: '#uploadImageBtn',
-            uploadImageForm: '#uploadImageForm',
-            deleteMessege: '.deleteMessege'
-        }
-
-        var websiteElementType = {
-            text: 1,
-            image: 2
-        }
-
-        var fontWeightType = {
-            normal: 1,
-            bold: 2
-        }
-
-        var fontStyleType = {
-            normal: 1,
-            italic: 2
-        }
-
-        var navigationBarColor = {
-            "black-bg": 1,
-            "blue-bg": 2,
-            "gray-bg": 3,
-            "white-bg": 4,
-            "navy-bg": 5,
-            "lazur-bg": 6
-        }
-
-        var fontFamilyType = {
-            "Arial": 1,
-            "'Century Gothic'": 2,
-            "'Copperplate Gothic Light'": 3,
-            "Georgia": 4,
-            "Impact": 5,
-            "'Lucida Console'": 6,
-            "'Tahoma'": 7,
-            "'Times New Roman'": 8,
-            "'Trebuchet MS'": 9,
-            "'Verdana'": 10
-        };
-
-        var grid;
-        var items;
-        var itemsToDelelete = [];
-        var selectedTextAreaForEdit = null;
-        var selectorWidgetId = [];
-        var navigationArray = [];
-        var isDeleteNavigationArrayFromServer = false;
-        var navigationArrayFromServer = [];
-        var navigationBarStyles = null;
-        var websiteColorTmp = "";
-        var selectedImage = null;
-
-        $(function () {
-            init();
-        });
-
-        function init() {
-            initGridStack();
-            $()
-
-            $(selectors.deleteMessege).click(function () {
-                $(".errorForUploadImage").hide();
-                $('.errorForAddTextOrImage').hide();
-                $('.errorForAddTextOrImageRequired').hide();
-            });
-
-            $(selectors.uploadImageForm).submit(function (event) {
-                var file = $("#file-upload").prop('files');
-                debugger;
-                if (file.length > 0) {
-                    return;
-                }
-                else {
-                    $(".errorForUploadImage").show();
-                    event.preventDefault();
-                }
-            });
-
-            $(selectors.saveBtn).click(saveWebsite);
-
-            $(selectors.addTextBtn).click(addNewWidgetForText);
-
-            $(selectors.addImageBtn).click(addNewWidgetForImage);
-
-            $(selectors.addNavigationBar).click(function () {
-                $(selectors.navigationBar).show();
-
-                var value = $('input:radio[name=optradio]:checked').val();
-                navigationBarStyles = stringOFNavigationBar(value);
-                $('nav').removeClass();
-                $('nav').addClass('navbar');
-                $(selectors.navigationBar).find('.navbar').addClass(navigationBarStyles);
-                debugger;
-                initNavigationContainer();
-            });
-
-            $(selectors.selectImage).click(function () {
-                selectImage(this);
-            });
-
-            $(selectors.selectFontSize).change(function () {
-                selectFontSize(this);
-            });
-
-
-            $(selectors.selectFontFamily).change(function () {
-                selectFontFamily(this);
-            });
-
-            $(selectors.selectFontStyle).change(function () {
-                selectFontStyle(this);
-            });
-
-            $(selectors.selectFontWeight).change(function () {
-                selectFontWeight(this);
-            });
-
-            $(selectors.addNavbarElementBtn).click(function () {
-                addNavbarElement();
-            });
-            $('input:radio[name=optradio]').change(function () {
-                debugger;
-                var value = $('input:radio[name=optradio]:checked').val();
-                navigationBarStyles = stringOFNavigationBar(value);
-                $(this).addClass(navigationBarStyles);
-
-            });
-        }
-        function addNavbarElement() {
-            var navigationName = $(selectors.nameNavigation).val();
-            var selectedWidgetId = $(selectors.selectSections).val();
-            var sectionName = selectorWidgetId[selectedWidgetId];
-
-            var object = {
-                NavigationName: navigationName,
-                SectionName: sectionName
-            };
-
-            navigationArray.push(object);
-            selectorWidgetId.splice(selectedWidgetId, 1);
-
-
-            var navigationBar = $(selectors.navigationBar);
-            var lastElementUl = navigationBar.find("li:last-child").remove();
-            var navigationBarLi = navigationBar.find("ul")
-                .append($('<li>')
-                    .append($('<a>').attr('href', '#' + sectionName)
-                        .append($('<span>').attr('class', 'tab')
-                            .append(navigationName)
-                        )));
-
-
-            var navigationLast = navigationBar.find("ul")
-                .append($('<li>').css({ 'fontSize': '20px', 'padding-top': '10px', 'color': 'red' }).attr('class', 'addNavigationListItem')
-                    .append($('<i>').attr('class', 'fa fa-plus')));
-
-            $(selectors.nameNavigation).val(null);
-            $(selectors.addNavigationElement).hide();
-            initNavigationContainer();
-            initDropdownSections();
-        }
-        function initNavigationContainer() {
-
-
-            $(selectors.addNavigationListItem).click(function () {
-
-                $(selectors.addNavigationElement).show();
-            });
-
-            $(selectors.deleteNavbar).click(function () {
-                deleteNavbar();
-            });
-        }
-        function deleteNavbar() {
-            $.each(navigationArray, function (index, value) {
-                selectorWidgetId.push(value.SectionName);
-            });
-            isDeleteNavigationArrayFromServer = true;
-            navigationArray = [];
-            var navigationBar = $(selectors.navigationBar);
-            navigationBar.find("li").remove();
-            var navigationLast = navigationBar.find("ul")
-                .append($('<li>').css({ 'fontSize': '20px', 'padding-top': '10px', 'color': 'red' }).attr('class', 'addNavigationListItem')
-                    .append($('<i>').attr('class', 'fa fa-plus')));
-            $(selectors.addNavigationElement).hide();
-            navigationBar.hide();
-            initDropdownSections();
-        }
-        function initDropdownSections() {
-            $(selectors.selectSections).empty();
-            $.each(selectorWidgetId, function (key, value) {
-                $(selectors.selectSections)
-                    .append($("<option></option>")
-                        .attr("value", key)
-                        .text(value));
-            });
-        }
-        function selectFontFamily(context) {
-            var changeValue = parseInt($(context).val());
-            var textArea = $("#" + selectedTextAreaForEdit);
-            var fontFamilyValue = stringOfFontFamilyType(changeValue);
-            $(textArea).css({ "font-family": fontFamilyValue });
-        }
-        function selectFontSize(context) {
-            var changeValue = $(context).val();
-            var textArea = $("#" + selectedTextAreaForEdit);
-            $(textArea).css('font-size', changeValue + "px");
-        }
-        function selectFontStyle(context) {
-            var changeValue = parseInt($(context).val());
-            var textArea = $("#" + selectedTextAreaForEdit);
-            var fontWeightValue = stringOfFontStyleType(changeValue);
-            $(textArea).css("font-style", fontWeightValue);
-        }
-        function selectFontWeight(context) {
-            var changeValue = parseInt($(context).val());
-            var textArea = $("#" + selectedTextAreaForEdit);
-            var fontWeightValue = stringOfFontWeightType(changeValue);
-            $(textArea).css("font-weight", fontWeightValue);
-        }
-        function selectImage(image) {
-            $(selectedImage).css('outline', '1px solid black');
-            debugger;
-            var imageSrc = $(image).attr('src');
-            var imageId = $(image).attr('value');
-            $(image).css('outline', '1px solid red');
-            $(selectors.selectImageLabel).hide();
-            $(selectors.addImageBtn).show();
-            $(selectors.addImageBtn).css({ "margin-bottom": "10px", "margin-top": "10px" });
-            $(selectors.imageId).show();
-            $(selectors.addImageSrcHiddenInput).val(imageSrc);
-            $(selectors.addImageIdHiddenInput).val(imageId);
-            selectedImage = image;
-        }
-        function addNewWidgetForText() {
-            var textSelectorId = $(selectors.textId).val();
-            var isSelectorUnique = checkUniqueWidgetId(textSelectorId);
-
-            if (!textSelectorId) {
-                $('.errorForAddTextOrImageRequired').show();
-                return;
-            }
-
-            if (isSelectorUnique == false) {
-                $('.errorForAddTextOrImage').show();
-                return;
-            }
-
-
-            $(selectors.textIdError).empty();
-
-            addNewWidget(websiteElementType.text, null, null, textSelectorId);
-        }
-        function addNewWidgetForImage() {
-            var imageSrc = $(selectors.addImageSrcHiddenInput).val();
-            var imageId = $(selectors.addImageIdHiddenInput).val();
-            var imageSelectorId = $(selectors.imageId).val();
-
-            var isSelectorUnique = checkUniqueWidgetId(imageSelectorId);
-
-            if (!imageSelectorId) {
-                $('.errorForAddTextOrImageRequired').show();
-                return;
-            }
-
-            if (isSelectorUnique == false) {
-                $('.errorForAddTextOrImage').show();
-                return;
-            }
-            $(selectors.imageIdError).empty();
-
-
-
-            addNewWidget(websiteElementType.image, imageSrc, imageId, imageSelectorId);
-        }
-        function checkUniqueWidgetId(element) {
-            return !(selectorWidgetId.indexOf(element) > -1);
-        }
-        function addNewWidget(websiteElement, imageSrc, imageId, selectorId) {
-
-            selectorWidgetId.push(selectorId);
-            items = getWidgets();
-
-            var maxY = getMaxY();
-
-            var widgetMax = items.find(x => x.y == maxY);
-
-            if (maxY != null) {
-                maxY = maxY + widgetMax.height + 1;
-            }
-            else {
-                maxY = 0;
-            }
-
-            var widgetDefinition;
-            var node;
-
-            if (websiteElement == websiteElementType.image) {
-                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><img src="' + imageSrc + '" value="' + imageId + '" id="' + selectorId + '" style = "overflow:hidden;height:auto;width:auto;" /> <div class="deleteWidget">&times;</div></div ></div > ';
-                node = {
-                    x: 0,
-                    y: maxY,
-                    width: 3,
-                    height: 2
-                };
-            }
-            else if (websiteElement == websiteElementType.text) {
-                widgetDefinition = '<div><div class="grid-stack-item-content" style="border:2px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;" id="' + selectorId + '" ></textarea><span class="editWidget"><i class="fa fa-pencil" aria-hidden="true"></i></span><div class="deleteWidget">&times;</div></div></div>';
-                node = {
-                    x: 0,
-                    y: maxY,
-                    width: 12,
-                    height: 1
-                }
-            }
-
-            grid.addWidget($(widgetDefinition), node.x, node.y, node.width, node.height);
-
-            initActionWidget();
-
-            return false;
-        }
-        function initNavigationBar(data) {
-            if (data.length > 0) {
-                var navigationBar = $(selectors.navigationBar);
-                $(selectors.navigationBar).find('nav').addClass(data[0].NavigationBarStyle);
-                var lastElementUl = navigationBar.find("li:last-child").remove();
-                $.each(data, function (index, value) {
-                    var object = {
-                        NavigationId: value.NavigationId,
-                        SectionName: value.SectionName,
-                        NavigationName: value.NavigationName
-                    };
-
-                    navigationArray.push(object);
-                    var selectorWidgetIdTmp = getSelectorWidgetIdFromArray(value.SectionName);
-                    selectorWidgetId.splice(selectorWidgetIdTmp, 1);
-
-
-                    var navigationBarLi = navigationBar.find("ul")
-                        .append($('<li>').attr('id', value.NavigationId)
-                            .append($('<a>').attr('href', '#' + value.SectionName)
-                                .append($('<span>').attr('class', 'tab')
-                                    .append(value.NavigationName)
-                                )));
-                });
-                $(selectors.navigationBar).show();
-
-                var navigationLast = navigationBar.find("ul")
-                    .append($('<li>').css({ 'fontSize': '20px', 'padding-top': '10px', 'color': 'red' }).attr('class', 'addNavigationListItem')
-                        .append($('<i>').attr('class', 'fa fa-plus')));
-
-                $(selectors.nameNavigation).val(null);
-                $(selectors.addNavigationElement).hide();
-                initNavigationContainer();
-                initDropdownSections();
-            }
-        }
-        function initGridStack() {
-            var websiteId = $(selectors.websiteIdHidden).val();
-
-            AjaxHelper.get("/WebsiteEditor/GetWebsiteContent", { id: websiteId }, function (data) {
-                websiteColorTmp = data.WebsiteColor;
-                items = data;
-                var navigationBars = data.NavigationBars;
-                navigationArrayFromServer = data.NavigationBars;
-                var options = {
-                };
-                $(selectors.grid).gridstack(options);
-                $(selectors.grid).each(function () {
-                    grid = $(this).data('gridstack');
-                    _.each(items.WebsiteContents, function (node) {
-                        selectorWidgetId.push(node.SelectorId);
-
-                        var fontSize = node.FontSize;
-                        var fontWeight = stringOfFontWeightType(node.FontWeight);
-                        var fontFamily = stringOfFontFamilyType(node.FontFamily);
-                        var fontStyle = stringOfFontStyleType(node.FontStyle);
-                        var fontColor = node.FontColor;
-
-                        var styleForFont = 'font-weight:' + fontWeight + ';font-style:' + fontStyle + ';font-family:' + fontFamily + ';font-size:' + fontSize + 'px;' + 'color:' + fontColor + ';';
-
-                        if (node.WebsiteElementType == websiteElementType.image) {
-                            node.ImageSrc = node.ImageSrc.replace("~", "");
-                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><img src="' + node.ImageSrc + '" style="overflow:hidden;height:auto;width:auto;" id="' + node.SelectorId + '"  /><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
-                                node.X, node.Y, node.Width, node.Height)
-                        }
-                        else if (node.WebsiteElementType == websiteElementType.text) {
-                            grid.addWidget($('<div><div class="grid-stack-item-content" style="border:3px dashed black;display:flex;"><textarea style="overflow:hidden;max-height:100%;' + styleForFont + '" id="' + node.SelectorId + '" >' + node.Text + '</textarea><span class="editWidget"><i class="fa fa-pencil" aria-hidden="true"></i></span><div class="deleteWidget" value="' + node.Id + '">&times;</div> <input type = "hidden" value="' + node.Id + '" /></div></div>'),
-                                node.X, node.Y, node.Width, node.Height)
-                        }
-
-                    }, this);
-
-                    return false;
-                });
-                initActionWidget(navigationBars);
-            })
-        }
-        function initActionWidget(navigationBars) {
-            initDeleteWidget();
-            initEditTextArea();
-            initColorPickerForFontColor();
-            initDropdownSections();
-            initNavigationBar(navigationBars);
-            initColorPicker();
-        }
-        function initDeleteWidget() {
-            $(selectors.deleteWidget).click(function () {
-                var widgetId;
-                var context = this;
-                var widgetTypeTmp = $(this).prev();
-                var widgetType = $(widgetTypeTmp).prop('tagName') == "IMG" ? websiteElementType.image : websiteElementType.text;
-                var item = $(this).parent().parent();
-                var id = $(this).next().val();
-                var coordinateX = item.data('gs-x');
-                var coordinateY = item.data('gs-y');
-                var height = item.data('gs-height');
-                var width = item.data('gs-width');
-
-                if (id) {
-                    var websiteToDelete = {};
-                    websiteToDelete.Id = id;
-                    websiteToDelete.WebsiteElementType = widgetType;
-                    itemsToDelelete.push(websiteToDelete);
-                }
-                getWidgetsAsync();
-                getWidgetIdFromArrayAndDelete(context);
-
-                function getWidgetsAsync() {
-                    setTimeout(function () {
-                        items = getWidgets();
-                    }, 100);
-                }
-                function getWidgetIdFromArrayAndDelete(context) {
-                    setTimeout(function () {
-                        widgetId = getWidgetIdFromArray(coordinateX, coordinateY);
-                        deleteWidget(widgetId, context);
-                    }, 200);
-                }
-                function deleteWidget(widgetId, ciaobella) {
-                    setTimeout(function () {
-                        if (widgetId > -1) {
-                            items.splice(widgetId, 1);
-                            let deleteWidget = $(context).closest(".grid-stack-item");
-                            grid.removeWidget(deleteWidget);
-                        }
-                    }, 250);
-                }
-            });
-        }
-        function initEditTextArea() {
-            $(selectors.editTextarea).click(function () {
-                if (selectedTextAreaForEdit != null) {
-                    $("#" + selectedTextAreaForEdit).closest('.grid-stack-item-content').css('border', '3px dashed black');
-                }
-
-                var textArea = $(this).siblings('textarea');
-                textArea.closest('.grid-stack-item-content').css('border', '3px dashed red');
-                var textareaId = textArea.attr('id');
-                var textColor = textArea.css('color');
-                var textFontSize = textArea.css('font-size');
-                var textFontFamily = textArea.css('font-family');
-                var textFontWeight = textArea.css('font-weight');
-                var textFontStyle = textArea.css('font-style');
-
-                textFontSize = parseInt(textFontSize.replace("px", ""));
-                textFontStyle = textFontStyle === "normal" ? fontStyleType.normal : fontStyleType.italic;
-                textFontWeight = textFontWeight === 400 ? fontWeightType.normal : fontWeightType.bold;
-                textFontFamily = fontFamilyType[textFontFamily] == null ? fontFamilyType.Arial : fontFamilyType[textFontFamily];
-                textColor = convertRGBtoHex(textColor);
-
-                $(selectors.selectFontFamily).val(textFontFamily);
-                $(selectors.selectFontSize).val(textFontSize);
-                $(selectors.selectFontWeight).val(textFontWeight);
-                $(selectors.selectFontStyle).val(textFontStyle);
-
-                $(selectors.changeFontColorBtn).find('input[type="text"]').val(textColor);
-                selectedTextAreaForEdit = textareaId;
-            });
-        }
-        function convertRGBtoHex(rgb) {
-            rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-            return (rgb && rgb.length === 4) ? "#" +
-                ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-                ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-                ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
-        }
-        function getWidgetIdFromArray(coordinateX, coordinateY) {
-            var result;
-            items.filter(function (e, index) {
-                if (e.x == coordinateX && e.y == coordinateY) {
-                    result = index;
-                    return true;
-                }
-            });
-            return result;
-        }
-        function getSelectorWidgetIdFromArray(sectionName) {
-            var result;
-            selectorWidgetId.filter(function (e, index) {
-                if (e == sectionName) {
-                    result = index;
-                    return true;
-                }
-            });
-            return result;
-        }
-        function getWidgets() {
-            return _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
-                el = $(el);
-                var textareaValue = null;
-                var imageSrc = imageSrc = el.find('img').attr("src");
-                var imageId = null;
-                var elementId = el.find('input[type="hidden"]').val();
-                var node = el.data('_gridstack_node');
-                var selectorId = null;
-
-
-                var fontSizeText = null;
-                var fontWeightText = null;
-                var fontColorText = null;
-                var fontStyleText = null;
-                var fontFamilyText = null;
-                var fontColorText = null;
-
-                var type = imageSrc != null ? websiteElementType.image : websiteElementType.text;
-
-                if (type == websiteElementType.text) {
-                    var fontSizeTextTmp = el.find('textarea').css('fontSize');
-                    textareaValue = el.find('textarea').val();
-                    selectorId = el.find('textarea').attr('id');
-
-                    fontSizeText = parseInt(fontSizeTextTmp.replace("px", ""));
-
-
-                    fontStyleText = el.find('textarea').css('font-style');
-                    fontStyleText = fontStyleText === "normal" ? fontStyleType.normal : fontStyleType.italic;
-
-                    fontWeightText = el.find('textarea').css('font-weight');
-                    fontWeightText = fontWeightText === 400 ? fontWeightType.normal : fontWeightType.bold;
-
-                    fontFamilyText = el.find('textarea').css('font-family');
-                    fontFamilyText = fontFamilyType[fontFamilyText];
-
-                    fontColorText = convertRGBtoHex(el.find('textarea').css('color'));
-                }
-                else {
-                    selectorId = el.find('img').attr('id');
-
-                    imageId = el.find('img').attr("value");
-                }
-
-                return {
-                    x: node.x,
-                    y: node.y,
-                    width: node.width,
-                    height: node.height,
-                    text: textareaValue,
-                    imageId: imageId,
-                    imageSrc: imageSrc,
-                    id: elementId,
-                    selectorId: selectorId,
-                    websiteElementType: type,
-                    fontSize: fontSizeText,
-                    fontStyle: fontStyleText,
-                    fontWeight: fontWeightText,
-                    fontFamily: fontFamilyText,
-                    fontColor: fontColorText
-                }
-            }, this);
-        }
-        function getMaxY() {
-            if (items.length != 0) {
-                return items.reduce((max, p) => p.y > max ? p.y : max, items[0].y);
-            }
-            return null;
-        }
-        function stringOfFontFamilyType(value) {
-            for (var k in fontFamilyType) if (fontFamilyType[k] == value) return k;
-            return null;
-        }
-        function stringOFNavigationBar(value) {
-            for (var k in navigationBarColor) if (navigationBarColor[k] == value) return k;
-            return null;
-        }
-        function stringOfFontStyleType(value) {
-            for (var k in fontStyleType) if (fontStyleType[k] == value) return k;
-            return null;
-        }
-        function stringOfFontWeightType(value) {
-            for (var k in fontWeightType) if (fontWeightType[k] == value) return k;
-            return null;
-        }
-        function saveWebsite() {
-            debugger;
-            var websiteId = $(selectors.websiteIdHidden).val();
-            var widgets = getWidgets();
-            var website = {
-                WebsiteId: websiteId,
-                WebsiteColor: websiteColorTmp,
-                WebsiteContents: widgets,
-                WidgetsToRemove: itemsToDelelete,
-                NavigationBars: navigationArray,
-                NavigationBarsToRemove: navigationArrayFromServer,
-                IsDeleteNavigationArrayFromServer: isDeleteNavigationArrayFromServer,
-                NavigationBarStyle: navigationBarStyles
-            };
-            AjaxHelper.postAndHandleErrors("/WebsiteEditor/SaveWebsite", { request: website }, null, function () {
-                window.location.href = "/Website/Index";
-            });
-
-        }
-        function initColorPickerForFontColor() {
-            $(selectors.changeFontColorBtn).colorpicker({
-                color: 'Zmien kolor tła',
-                colorSelectors: {
-                    'red': '#FF0000',
-                    'orange': '#FFA500',
-                    'yellow': '#ffff00',
-                    'limegreen': '#32cd32',
-                    'green': '#00ff00',
-                    'blue': '#0000ff '
-                }
-            }
-            ).on('changeColor', function (e) {
-                var colorHex = e.color.toString('hex');
-                var textArea = $("#" + selectedTextAreaForEdit);
-                $(textArea).css('color', colorHex);
-            });
-        }
-        function initColorPicker() {
-            debugger;
-            $(selectors.backgroundColorBtn).colorpicker(
-                {
-                    "color": ""+websiteColorTmp,
-                    colorSelectors: {
-                        'red': '#FF0000',
-                        'orange': '#FFA500',
-                        'yellow': '#ffff00',
-                        'limegreen': '#32cd32',
-                        'green': '#00ff00',
-                        'blue': '#0000ff '
-                    }
-                }
-            ).on('changeColor', function (e) {
-
-                $(selectors.backgroundColorBtn).val();
-                websiteColorTmp = e.color.toString('hex');
-                debugger;
-                $(selectors.websiteContainer).css("background-color", e.color.toString('hex'));
-            });
-        }
-    </script>
 </head>
 <body>
-
     @Html.HiddenFor(m => m.WebsiteId)
     <header>
         <div><h2>Konfigurator strony</h2></div>
-        <div><a class="btn btn-danger" id="save-website-btn">Zapisz</a></div>
+        <div><a class="btn btn-danger" id="save-website-btn" style="margin-bottom:10px;">Zapisz</a></div>
     </header>
     <main>
         <div class="left_column">
@@ -762,22 +65,22 @@
                                 <div class="panel-body" style="padding-top:0;text-align:center;">
                                     @using (Html.BeginForm("UploadImage", "WebsiteEditor", FormMethod.Post, new { enctype = "multipart/form-data",id="uploadImageForm" }))
                                     {
-                                        <input type="hidden" name="WebsiteId" value="@Model.WebsiteId" />
-                                        <div class="form-group">
-                                            <label for="file-upload" class="custom-file-upload col-lg-12">
-                                                <i class="fa fa-cloud-upload"></i> Wybierz plik
-                                            </label>
-                                            
-                                            
-                                            <input id="file-upload" type="file" name="ImageFile" />
-                                        </div>
+                                    <input type="hidden" name="WebsiteId" value="@Model.WebsiteId" />
+                                    <div class="form-group">
+                                        <label for="file-upload" class="custom-file-upload col-lg-12">
+                                            <i class="fa fa-cloud-upload"></i> Wybierz plik
+                                        </label>
+
+
+                                        <input id="file-upload" type="file" name="ImageFile" />
+                                    </div>
+                                    <div>
                                         <div>
                                             <div>
-                                                <div>
-                                                    <input type="submit" value="Zapisz" id="uploadImageBtn" class="btn btn-danger" />
-                                                </div>
+                                                <input type="submit" value="Zapisz" id="uploadImageBtn" class="btn btn-danger" />
                                             </div>
                                         </div>
+                                    </div>
                                     }
                                 </div>
                             </div>
@@ -809,7 +112,7 @@
                                 </h4>
                             </div>
                             <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                                <div class="panel-body" id="imageContainer">
+                                <div class="panel-body" id="imageContainer" style="height:300px;overflow-y:scroll;">
                                     <div>
                                         <label id="select-image-label" style="color:black;">Wybierz zdjęcie</label>
                                         <input type="hidden" id="add-image-src-hidden-input" value="" />
@@ -819,7 +122,7 @@
                                     </div>
                                     @foreach (var image in Model.Images)
                                     {
-                                        <img src="@Url.Content(image.ImagePath)" height="110" width="110" value="@image.ImageId" style="margin-right:5px;border:1px solid black;" />
+                                    <img src="@Url.Content(image.ImagePath)" height="140" width="140" value="@image.ImageId" style="margin-right:5px;border:1px solid black;margin-bottom:5px;" />
                                     }
 
                                 </div>
@@ -840,7 +143,7 @@
                                         <div style="color:black;">
                                             <div class="radio">
                                                 <div class="black-bg selectStyleColor">
-                                                    <input type="radio" name="optradio" value="1" checked="checked" class="radio" >
+                                                    <input type="radio" name="optradio" value="1" checked="checked" class="radio">
                                                 </div>
                                             </div>
                                             <div class="radio">
@@ -850,7 +153,7 @@
                                             </div>
                                             <div class="radio">
                                                 <div class="gray-bg selectStyleColor">
-                                                    <input type="radio" name="optradio" value="3" >
+                                                    <input type="radio" name="optradio" value="3">
                                                 </div>
                                             </div>
                                             <div class="radio">
@@ -858,18 +161,8 @@
                                                     <input type="radio" name="optradio" value="4">
                                                 </div>
                                             </div>
-                                            <div class="radio">
-                                                <div class="navy-bg selectStyleColor">
-                                                    <input type="radio" name="optradio" value="5">
-                                                </div>
-                                            </div>
-                                            <div class="radio">
-                                                <div class="lazur-bg selectStyleColor">
-                                                    <input type="radio" name="optradio" value="6" class="radio">
-                                                </div>
-                                            </div>
                                         </div>
-                                        
+
                                     </div>
                                     <div>
                                         <input type="button" class="btn btn-danger" id="add-navigation-bar" value="Dodaj menu" />
@@ -888,7 +181,7 @@
                     <nav class="navbar" style="border-radius:0;">
                         <div class="container-fluid">
                             <ul class="nav navbar-nav">
-                                <li style="font-size:20px;padding-top:10px; color:red;" class="addNavigationListItem"><i class="fa fa-plus" aria-hidden="true"></i></li>
+                                <li class="addNavigationListItem"><i class="fa fa-plus" aria-hidden="true"></i></li>
                             </ul>
                             <div class="deleteNavbar">&times;</div>
                         </div>
@@ -896,89 +189,95 @@
                 </div>
 
                 <div class="container-fluid">
-
                     <div class="grid-stack" id="grid">
                     </div>
                 </div>
             </div>
-            <div class="addNavigationElement" style="display:none;">
-                <div class="container-fluid" style="color:black;">
-                    <h3>
-                        Edytuj
-                    </h3>
-                    <div>
-                        <label>Nazwa</label>
-                        <input type="text" class="nameNavigation" placeholder="np. Obrazki" />
+            <div class="addNavigationElement" style="display:none;color:black;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Dodaj element do menu
+                        </h4>
+                        <div class="deleteNavigationForm">&times;</div>
                     </div>
-                    <div>
-                        <label>Wybierz sekcję</label>
-                        <select id="selectSections"></select>
+                    <div class="panel-body">
+                            <div class="form-group">
+                                <label>Nazwa elementu</label>
+                                <input type="text" class="nameNavigation form-control" placeholder="np. Obrazek1" />
+                            </div>
+                        <div class="form-group">
+                            <label>Wybierz element</label>
+                            <select id="selectSections" class="form-control"></select>
+                        </div>
+                        <button class="btn btn-danger" id="addNavbarElementBtn" disabled>Dodaj</button>
                     </div>
-                    <div>
-                        <button class="btn btn-danger" id="addNavbarElementBtn">Dodaj</button>
-                    </div>
-
-
                 </div>
             </div>
-            <div class="editWidgetDiv">
-                <div class="container-fluid" style="color:black;">
-                    <h3>
-                        Edytuj
-                    </h3>
-                    <div class="row">
-                        <label>Wybierz rodzaj</label>
-                        <select id="selectFontFamily">
-                            <option value="1" style="font-family:Arial;">Arial</option>
-                            <option value="2" style="font-family:'Century Gothic';">Century Gothic</option>
-                            <option value="3" style="font-family:'Copperplate Gothic Light';">Copperplate Gothic Light</option>
-                            <option value="4" style="font-family:Georgia;">Georgia</option>
-                            <option value="5" style="font-family:Impact;">Impact</option>
-                            <option value="6" style="font-family:'Lucida Console';">Lucida Console</option>
-                            <option value="7" style="font-family:Tahoma;">Tahoma</option>
-                            <option value="8" style="font-family:'Times New Roman';">Times New Roman</option>
-                            <option value="9" style="font-family:'Trebuchet MS';">Trebuchet MS</option>
-                            <option value="10" style="font-family:Verdana">Verdana</option>
-                        </select>
+            <div class="editWidgetDiv" style="color:black;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Edycja tekstu
+                        </h4>
                     </div>
-                    <div class="row">
-                        <label>Wybierz rozmiar</label>
-                        <select id="selectFontSize">
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="14">14</option>
-                            <option value="16">16</option>
-                            <option value="18">18</option>
-                            <option value="20">20</option>
-                            <option value="22">22</option>
-                            <option value="24">24</option>
-                            <option value="26">26</option>
-                            <option value="28">28</option>
-                            <option value="30">30</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <label>Wybierz styl czcionki</label>
-                        <select id="selectFontStyle">
-                            <option value="1">Normalna</option>
-                            <option value="2">Pochylona</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <label>Wybierz grubość czcionki</label>
-                        <select id="selectFontWeight">
-                            <option value="1" style="font-weight:normal;">Normalna</option>
-                            <option value="2" style="font-weight:bold;">Pogrubiona</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <label>Wybierz kolor czcionki</label>
-                        <div id="changeFontColorBtn" class="input-group colorpicker-component">
-                            <input type="text" value="" />
-                            <span class="input-group-addon"><i></i></span>
+                    <div class="panel-body" id="imageContainer">
+                        <div class="editTextToolbox" style="height:350px;">
+                            <div class="form-group">
+                                <label>Wybierz rodzaj</label>
+                                <select id="selectFontFamily" disabled class="form-control">
+                                    <option value="1" style="font-family:Arial;">Arial</option>
+                                    <option value="2" style="font-family:'Century Gothic';">Century Gothic</option>
+                                    <option value="3" style="font-family:'Copperplate Gothic Light';">Copperplate Gothic Light</option>
+                                    <option value="4" style="font-family:Georgia;">Georgia</option>
+                                    <option value="5" style="font-family:Impact;">Impact</option>
+                                    <option value="6" style="font-family:'Lucida Console';">Lucida Console</option>
+                                    <option value="7" style="font-family:Tahoma;">Tahoma</option>
+                                    <option value="8" style="font-family:'Times New Roman';">Times New Roman</option>
+                                    <option value="9" style="font-family:'Trebuchet MS';">Trebuchet MS</option>
+                                    <option value="10" style="font-family:Verdana">Verdana</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Wybierz rozmiar</label>
+                                <select id="selectFontSize" disabled class="form-control">
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="14">14</option>
+                                    <option value="16">16</option>
+                                    <option value="18">18</option>
+                                    <option value="20">20</option>
+                                    <option value="22">22</option>
+                                    <option value="24">24</option>
+                                    <option value="26">26</option>
+                                    <option value="28">28</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Wybierz styl czcionki</label>
+                                <select id="selectFontStyle" disabled class="form-control">
+                                    <option value="1">Normalna</option>
+                                    <option value="2">Pochylona</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Wybierz grubość czcionki</label>
+                                <select id="selectFontWeight" disabled class="form-control">
+                                    <option value="1" style="font-weight:normal;">Normalna</option>
+                                    <option value="2" style="font-weight:bold;">Pogrubiona</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Wybierz kolor czcionki</label>
+                                <div id="changeFontColorBtn" class="input-group colorpicker-component">
+                                    <input type="text" value="" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

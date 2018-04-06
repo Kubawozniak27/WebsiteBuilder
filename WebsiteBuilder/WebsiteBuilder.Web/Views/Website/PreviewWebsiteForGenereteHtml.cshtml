@@ -18,25 +18,28 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/Common.css" />
+    <link rel="stylesheet" href="css/navbarBgColor.css" />
 </head>
 <body style="background-color:@Model.WebsiteColor">
-    <div>
-        <nav class="navbar @navbarColor" style="border-radius:0;">
-            <ul class="nav navbar-nav">
-                @foreach (var item in Model.NavigationBars)
-                {
-                    var hrefTmp = "#" + item.SectionName;
-                    <li id="15">
-                        <a href="@hrefTmp">
-                            <span class="tab">@item.NavigationName</span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </nav>
-    </div>
-    <div class="container-fluid" style="padding:40px;">
+    @if (navbarColor != "")
+    {
+        <div>
+            <nav class="navbar @navbarColor" style="border-radius:0;">
+                <ul class="nav navbar-nav">
+                    @foreach (var item in Model.NavigationBars)
+                    {
+                        var hrefTmp = "#" + item.SectionName;
+                        <li>
+                            <a href="@hrefTmp">
+                                <span class="tab">@item.NavigationName</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+    <div class="container-fluid">
         @foreach (var i in groupWebsiteContent)
         {
             var first = 0;
@@ -67,9 +70,9 @@
                     if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
                     {
                         var imageSrc = item.ImageSrc.Replace("~/Images", "Images");
-                        <div class="@colWidth" style="@height ;display:flex;">
+                        <div class="@colWidth" style="@height ;display:flex;" id="@item.SelectorId" >
                             
-                            <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" id="@item.SelectorId" />
+                            <img src="@imageSrc" style="width:100%;height:@tmpHeightForImage" />
                         </div>
                     }
                     else

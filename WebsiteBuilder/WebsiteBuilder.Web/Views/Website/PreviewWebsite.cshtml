@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    var navbarColor = Model.NavigationBars != null ? Model.NavigationBars.First().NavigationBarStyle : "";
+    var navbarColor = Model.NavigationBars.Count > 0 ? Model.NavigationBars.FirstOrDefault().NavigationBarStyle : "";
 
     var groupWebsiteContent = Model.WebsiteContents.OrderBy(x => x.Y).GroupBy(x => x.Y).Select(y => new
     {
@@ -17,26 +17,28 @@
     <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-
-    <link href="~/Content/Common.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/navbarBgColor.css" rel="stylesheet" />
 </head>
 <body style="background-color:@Model.WebsiteColor">
-    <div>
-        <nav class="navbar @navbarColor" style="border-radius:0;">
+    @if (navbarColor != "")
+    {
+        <div>
+            <nav class="navbar @navbarColor" style="border-radius:0;">
                 <ul class="nav navbar-nav">
                     @foreach (var item in Model.NavigationBars)
-                    { 
+                    {
                         var hrefTmp = "#" + item.SectionName;
-                        <li id="15">
+                        <li>
                             <a href="@hrefTmp">
                                 <span class="tab">@item.NavigationName</span>
                             </a>
                         </li>
                     }
                 </ul>
-        </nav>
-    </div>
+            </nav>
+        </div>
+    }
     <div class="container-fluid">
         @foreach (var i in groupWebsiteContent)
         {
@@ -68,8 +70,8 @@
                     if (item.WebsiteElementType == WebsiteBuilder.Public.Website.WebsiteElementType.Image)
                     {
 
-                        <div class="@colWidth" style="@height ;display:flex;">
-                            <img src="@Url.Content(item.ImageSrc)" style="width:100%;height:@tmpHeightForImage" id="@item.SelectorId" />
+                        <div id="@item.SelectorId" class="@colWidth" style="@height ;display:flex;">
+                            <img src="@Url.Content(item.ImageSrc)" style="width:100%;height:@tmpHeightForImage"  />
                         </div>
                     }
                     else
@@ -81,7 +83,7 @@
                         var fontStyle = item.FontWeight;
                         var fontColor = item.FontColor;
                         var textStyles = ";font-size:" + fontSize + ";font-family:" + fontFamily + ";font-weight:" + fontWeight + ";font-style:" + fontStyle + ";color:" + fontColor;
-                        <div class="@colWidth " style="@height @textStyles" id="@item.SelectorId">
+                        <div id="@item.SelectorId" class="@colWidth " style="@height @textStyles"  >
                             @item.Text
                         </div>
                     }

@@ -14,6 +14,5 @@ namespace WebsiteBuilder.Data.Entities
         public string Color { get; set; }
         public virtual List<WebsiteText> WebsiteTexts { get; set; }
         public virtual List<Image> Images { get; set; }
-        public virtual List<WebsiteNavigationBar> WebsiteNavigationBars { get; set; }
     }
 }

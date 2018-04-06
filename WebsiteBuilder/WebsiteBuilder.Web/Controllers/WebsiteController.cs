@@ -70,12 +70,12 @@ namespace WebsiteBuilder.Web.Controllers
                 responseWebsite = reader.ReadToEnd();
             }
 
-            using ( var streamReader = new StreamReader(Server.MapPath("~/Content/bootstrap.min.css")))
+            using ( var streamReader = new StreamReader(Server.MapPath("~/Content/bootstrap.css")))
             {
                 responseBoostrapStyles = streamReader.ReadToEnd();
             }
 
-            using (var streamReader = new StreamReader(Server.MapPath("~/Content/Common.css")))
+            using (var streamReader = new StreamReader(Server.MapPath("~/Content/navbarBgColor.css")))
             {
                 responseCommonCss = streamReader.ReadToEnd();
             }
@@ -101,7 +101,7 @@ namespace WebsiteBuilder.Web.Controllers
                         zipStream.Write(bytesForBoostrapStyles, 0, bytesForBoostrapStyles.Length);
                     }
 
-                    zipArchiveEntry = archive.CreateEntry("css/Common.css", CompressionLevel.Optimal);
+                    zipArchiveEntry = archive.CreateEntry("css/navbarBgColor.css", CompressionLevel.Optimal);
                     using (var zipStream = zipArchiveEntry.Open())
                     {
                         zipStream.Write(bytesForresponseCommonCss, 0, bytesForresponseCommonCss.Length);

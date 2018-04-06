@@ -6565,10 +6565,12 @@ table.table-mail tr td {
 .gray-bg,
 .bg-muted {
     background-color: #f3f3f4;
+    color:black !important;
 }
 
 .white-bg {
     background-color: #ffffff;
+    color:black !important;
 }
 
 .navy-bg,
@@ -6580,7 +6582,7 @@ table.table-mail tr td {
 .blue-bg,
 .bg-primary {
     background-color: #1c84c6;
-    color: #ffffff;
+    color: #ffffff !important;
 }
 
 .lazur-bg,
@@ -6603,6 +6605,7 @@ table.table-mail tr td {
 
 .black-bg {
     background-color: #262626;
+    color:white !important;
 }
 
 .panel-primary {
